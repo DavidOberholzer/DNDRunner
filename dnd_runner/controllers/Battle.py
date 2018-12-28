@@ -7,7 +7,7 @@ battle_methods = Blueprint("battles", __name__)
 
 
 @battle_methods.route("/battles", methods=["GET"])
-def get_battless() -> dict:
+def get_battles() -> dict:
     battles = db_actions.crud(
         action="list",
         model=models.Battle,
@@ -19,7 +19,7 @@ def get_battless() -> dict:
 
 
 @battle_methods.route("/battles/<_id>", methods=["GET"])
-def get_battles(_id: int) -> dict:
+def get_battle(_id: int) -> dict:
     battle = db_actions.crud(
         action="read",
         model=models.Battle,

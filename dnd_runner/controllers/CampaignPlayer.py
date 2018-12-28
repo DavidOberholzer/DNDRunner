@@ -19,7 +19,7 @@ def get_campaign_players() -> dict:
 
 
 @campaign_player_methods.route("/campaign_players/<campaign_id>/<player_id>", methods=["GET"])
-def get_campaign_players(campaign_id: int, player_id: int) -> dict:
+def get_campaign_player(campaign_id: int, player_id: int) -> dict:
     campaign_player = db_actions.crud(
         action="read",
         model=models.CampaignPlayer,

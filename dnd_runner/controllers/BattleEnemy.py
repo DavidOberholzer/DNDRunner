@@ -19,7 +19,7 @@ def get_battle_enemies() -> dict:
 
 
 @battle_enemy_methods.route("/battle_enemies/<battle_id>/<enemy_id>", methods=["GET"])
-def get_battle_enemies(battle_id: int, enemy_id: int) -> dict:
+def get_battle_enemy(battle_id: int, enemy_id: int) -> dict:
     battle_enemy = db_actions.crud(
         action="read",
         model=models.BattleEnemy,

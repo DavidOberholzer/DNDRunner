@@ -19,7 +19,7 @@ def get_player_items() -> dict:
 
 
 @player_item_methods.route("/player_items/<player_id>/<item_id>", methods=["GET"])
-def get_player_items(player_id: int, item_id: int) -> dict:
+def get_player_item(player_id: int, item_id: int) -> dict:
     player_item = db_actions.crud(
         action="read",
         model=models.PlayerItem,
