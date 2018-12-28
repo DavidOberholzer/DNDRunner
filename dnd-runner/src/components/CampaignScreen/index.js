@@ -5,7 +5,11 @@ import CampaignBox from '../CampaignBox';
 
 class CampaignScreen extends Component {
     render() {
-        return <AddBox />;
+        return (
+            <div className="Campaign-Screen">
+                <AddBox />
+            </div>
+        );
     }
 }
 

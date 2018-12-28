@@ -21,9 +21,13 @@ const styles = {
 };
 
 class AddBox extends Component {
+    handleClick = event => {
+        console.log(event);
+    };
+
     render() {
         return (
-            <Card style={styles.card}>
+            <Card style={styles.card} onClick={this.handleClick}>
                 <CardContent style={{ alignContent: 'center' }}>
                     <IconButton>
                         <Add color="primary" style={styles.addIcon} />

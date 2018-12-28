@@ -20,7 +20,7 @@ const Campaign = () => (
                 <NavbarItem>Campaigns</NavbarItem>
             </Link>
         </Navbar> */}
-        <div className="Campaign-Screen">
+        <div>
             <CampaignScreen />
         </div>
     </div>
