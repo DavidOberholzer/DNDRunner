@@ -1,22 +1,18 @@
+from datetime import datetime
+
 from project.app import DB
-
-from sqlalchemy import types
-from sqlalchemy.sql import expression
-
-
-class UTCNow(expression.FunctionElement):
-    type = types.DateTime()
 
 
 class Campaign(DB.Model):
+    __tablename__ = "Campaign"
     id = DB.Column(DB.Integer, primary_key=True)
     name = DB.Column(DB.VARCHAR(30), unique=True, index=True, nullable=False)
-    description = DB.Column(DB.Text, nullable=True)
-    created_at = DB.Column(DB.DateTime, default=UTCNow(), nullable=False)
+    description = DB.Column(DB.VARCHAR(500), nullable=True)
+    created_at = DB.Column(DB.DateTime, default=datetime.utcnow(), nullable=False)
     updated_at = DB.Column(
         DB.DateTime,
-        default=UTCNow(),
-        onupdate=UTCNow(),
+        default=datetime.utcnow(),
+        onupdate=datetime.utcnow(),
         nullable=False
     )
 
@@ -25,16 +21,17 @@ class Campaign(DB.Model):
 
 
 class Player(DB.Model):
+    __tablename__ = "Player"
     id = DB.Column(DB.Integer, primary_key=True)
     name = DB.Column(DB.VARCHAR(30), unique=True, index=True, nullable=False)
     health = DB.Column(DB.Integer)
     carry_capacity = DB.Column(DB.Float)
     alive = DB.Column(DB.Boolean, default=True)
-    created_at = DB.Column(DB.DateTime, default=UTCNow(), nullable=False)
+    created_at = DB.Column(DB.DateTime, default=datetime.utcnow(), nullable=False)
     updated_at = DB.Column(
         DB.DateTime,
-        default=UTCNow(),
-        onupdate=UTCNow(),
+        default=datetime.utcnow(),
+        onupdate=datetime.utcnow(),
         nullable=False
     )
 
@@ -43,14 +40,15 @@ class Player(DB.Model):
 
 
 class Item(DB.Model):
+    __tablename__ = "Item"
     id = DB.Column(DB.Integer, primary_key=True)
     name = DB.Column(DB.VARCHAR(30), unique=True, index=True, nullable=False)
     weight = DB.Column(DB.Float)
-    created_at = DB.Column(DB.DateTime, default=UTCNow(), nullable=False)
+    created_at = DB.Column(DB.DateTime, default=datetime.utcnow(), nullable=False)
     updated_at = DB.Column(
         DB.DateTime,
-        default=UTCNow(),
-        onupdate=UTCNow(),
+        default=datetime.utcnow(),
+        onupdate=datetime.utcnow(),
         nullable=False
     )
 
@@ -59,15 +57,16 @@ class Item(DB.Model):
 
 
 class Enemy(DB.Model):
+    __tablename__ = "Enemy"
     id = DB.Column(DB.Integer, primary_key=True)
     name = DB.Column(DB.VARCHAR(30), unique=True, index=True, nullable=False)
     health = DB.Column(DB.Integer)
     alive = DB.Column(DB.Boolean, default=True)
-    created_at = DB.Column(DB.DateTime, default=UTCNow(), nullable=False)
+    created_at = DB.Column(DB.DateTime, default=datetime.utcnow(), nullable=False)
     updated_at = DB.Column(
         DB.DateTime,
-        default=UTCNow(),
-        onupdate=UTCNow(),
+        default=datetime.utcnow(),
+        onupdate=datetime.utcnow(),
         nullable=False
     )
 
@@ -76,14 +75,15 @@ class Enemy(DB.Model):
 
 
 class Battle(DB.Model):
+    __tablename__ = "Battle"
     id = DB.Column(DB.Integer, primary_key=True)
     name = DB.Column(DB.VARCHAR(30), unique=True, index=True, nullable=False)
     description = DB.Column(DB.Text, nullable=True)
-    created_at = DB.Column(DB.DateTime, default=UTCNow(), nullable=False)
+    created_at = DB.Column(DB.DateTime, default=datetime.utcnow(), nullable=False)
     updated_at = DB.Column(
         DB.DateTime,
-        default=UTCNow(),
-        onupdate=UTCNow(),
+        default=datetime.utcnow(),
+        onupdate=datetime.utcnow(),
         nullable=False
     )
 
@@ -92,13 +92,14 @@ class Battle(DB.Model):
 
 
 class BattleEnemy(DB.Model):
-    battle_id = DB.Column(DB.Integer, DB.ForeignKey("battle.id"), primary_key=True)
-    enemy_id = DB.Column(DB.Integer, DB.ForeignKey("enemy.id"), primary_key=True)
-    created_at = DB.Column(DB.DateTime, default=UTCNow(), nullable=False)
+    __tablename__ = "BattleEnemy"
+    battle_id = DB.Column(DB.Integer, DB.ForeignKey("Battle.id"), primary_key=True)
+    enemy_id = DB.Column(DB.Integer, DB.ForeignKey("Enemy.id"), primary_key=True)
+    created_at = DB.Column(DB.DateTime, default=datetime.utcnow(), nullable=False)
     updated_at = DB.Column(
         DB.DateTime,
-        default=UTCNow(),
-        onupdate=UTCNow(),
+        default=datetime.utcnow(),
+        onupdate=datetime.utcnow(),
         nullable=False
     )
 
@@ -107,13 +108,14 @@ class BattleEnemy(DB.Model):
 
 
 class CampaignBattle(DB.Model):
-    campaign_id = DB.Column(DB.Integer, DB.ForeignKey("battle.id"), primary_key=True)
-    battle_id = DB.Column(DB.Integer, DB.ForeignKey("enemy.id"), primary_key=True)
-    created_at = DB.Column(DB.DateTime, default=UTCNow(), nullable=False)
+    __tablename__ = "CampaignBattle"
+    campaign_id = DB.Column(DB.Integer, DB.ForeignKey("Battle.id"), primary_key=True)
+    battle_id = DB.Column(DB.Integer, DB.ForeignKey("Enemy.id"), primary_key=True)
+    created_at = DB.Column(DB.DateTime, default=datetime.utcnow(), nullable=False)
     updated_at = DB.Column(
         DB.DateTime,
-        default=UTCNow(),
-        onupdate=UTCNow(),
+        default=datetime.utcnow(),
+        onupdate=datetime.utcnow(),
         nullable=False
     )
 
@@ -122,13 +124,14 @@ class CampaignBattle(DB.Model):
 
 
 class CampaignPlayer(DB.Model):
-    campaign_id = DB.Column(DB.Integer, DB.ForeignKey("campaign.id"), primary_key=True)
-    player_id = DB.Column(DB.Integer, DB.ForeignKey("player.id"), primary_key=True)
-    created_at = DB.Column(DB.DateTime, default=UTCNow(), nullable=False)
+    __tablename__ = "CampaignPlayer"
+    campaign_id = DB.Column(DB.Integer, DB.ForeignKey("Campaign.id"), primary_key=True)
+    player_id = DB.Column(DB.Integer, DB.ForeignKey("Player.id"), primary_key=True)
+    created_at = DB.Column(DB.DateTime, default=datetime.utcnow(), nullable=False)
     updated_at = DB.Column(
         DB.DateTime,
-        default=UTCNow(),
-        onupdate=UTCNow(),
+        default=datetime.utcnow(),
+        onupdate=datetime.utcnow(),
         nullable=False
     )
 
@@ -137,13 +140,14 @@ class CampaignPlayer(DB.Model):
 
 
 class PlayerItem(DB.Model):
-    player_id = DB.Column(DB.Integer, DB.ForeignKey("player.id"), primary_key=True)
-    item_id = DB.Column(DB.Integer, DB.ForeignKey("item.id"), primary_key=True)
-    created_at = DB.Column(DB.DateTime, default=UTCNow(), nullable=False)
+    __tablename__ = "PlayerItem"
+    player_id = DB.Column(DB.Integer, DB.ForeignKey("Player.id"), primary_key=True)
+    item_id = DB.Column(DB.Integer, DB.ForeignKey("Item.id"), primary_key=True)
+    created_at = DB.Column(DB.DateTime, default=datetime.utcnow(), nullable=False)
     updated_at = DB.Column(
         DB.DateTime,
-        default=UTCNow(),
-        onupdate=UTCNow(),
+        default=datetime.utcnow(),
+        onupdate=datetime.utcnow(),
         nullable=False
     )
 
