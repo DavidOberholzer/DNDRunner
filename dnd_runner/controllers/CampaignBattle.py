@@ -6,7 +6,7 @@ from dnd_runner import db_actions, models
 campaign_battle_methods = Blueprint("campaign_battles", __name__)
 
 
-@campaign_battle_methods.route("/campaign_battles", methods=["GET"])
+@campaign_battle_methods.route("/campaign-battles", methods=["GET"])
 def get_campaign_battles() -> dict:
     campaign_battles = db_actions.crud(
         action="list",
@@ -18,7 +18,7 @@ def get_campaign_battles() -> dict:
     return jsonify(campaign_battles)
 
 
-@campaign_battle_methods.route("/campaign_battles/<campaign_id>/<battle_id>", methods=["GET"])
+@campaign_battle_methods.route("/campaign-battles/<campaign_id>/<battle_id>", methods=["GET"])
 def get_campaign_battle(campaign_id: int, battle_id: int) -> dict:
     campaign_battle = db_actions.crud(
         action="read",
@@ -31,7 +31,7 @@ def get_campaign_battle(campaign_id: int, battle_id: int) -> dict:
     return jsonify(campaign_battle)
 
 
-@campaign_battle_methods.route("/campaign_battles", methods=["POST"])
+@campaign_battle_methods.route("/campaign-battles", methods=["POST"])
 def add_campaign_battle() -> dict:
     data = request.json
     campaign_battle = db_actions.crud(
@@ -42,7 +42,7 @@ def add_campaign_battle() -> dict:
     return jsonify(campaign_battle)
 
 
-@campaign_battle_methods.route("/campaign_battles/<campaign_id>/<battle_id>", methods=["POST"])
+@campaign_battle_methods.route("/campaign-battles/<campaign_id>/<battle_id>", methods=["POST"])
 def update_campaign_battle(campaign_id: int, battle_id: int) -> dict:
     data = request.json
     campaign_battle = db_actions.crud(
@@ -57,7 +57,7 @@ def update_campaign_battle(campaign_id: int, battle_id: int) -> dict:
     return jsonify(campaign_battle)
 
 
-@campaign_battle_methods.route("/campaign_battles/<campaign_id>/<battle_id>", methods=["DELETE"])
+@campaign_battle_methods.route("/campaign-battles/<campaign_id>/<battle_id>", methods=["DELETE"])
 def delete_campaign_battle(campaign_id: int, battle_id: int) -> dict:
     result = db_actions.crud(
         action="delete",

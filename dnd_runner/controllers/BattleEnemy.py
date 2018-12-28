@@ -6,7 +6,7 @@ from dnd_runner import db_actions, models
 battle_enemy_methods = Blueprint("battle_enemies", __name__)
 
 
-@battle_enemy_methods.route("/battle_enemies", methods=["GET"])
+@battle_enemy_methods.route("/battle-enemies", methods=["GET"])
 def get_battle_enemies() -> dict:
     battle_enemies = db_actions.crud(
         action="list",
@@ -18,7 +18,7 @@ def get_battle_enemies() -> dict:
     return jsonify(battle_enemies)
 
 
-@battle_enemy_methods.route("/battle_enemies/<battle_id>/<enemy_id>", methods=["GET"])
+@battle_enemy_methods.route("/battle-enemies/<battle_id>/<enemy_id>", methods=["GET"])
 def get_battle_enemy(battle_id: int, enemy_id: int) -> dict:
     battle_enemy = db_actions.crud(
         action="read",
@@ -31,7 +31,7 @@ def get_battle_enemy(battle_id: int, enemy_id: int) -> dict:
     return jsonify(battle_enemy)
 
 
-@battle_enemy_methods.route("/battle_enemies", methods=["POST"])
+@battle_enemy_methods.route("/battle-enemies", methods=["POST"])
 def add_battle_enemy() -> dict:
     data = request.json
     battle_enemy = db_actions.crud(
@@ -42,7 +42,7 @@ def add_battle_enemy() -> dict:
     return jsonify(battle_enemy)
 
 
-@battle_enemy_methods.route("/battle_enemies/<battle_id>/<enemy_id>", methods=["POST"])
+@battle_enemy_methods.route("/battle-enemies/<battle_id>/<enemy_id>", methods=["POST"])
 def update_battle_enemy(battle_id: int, enemy_id: int) -> dict:
     data = request.json
     battle_enemy = db_actions.crud(
@@ -57,7 +57,7 @@ def update_battle_enemy(battle_id: int, enemy_id: int) -> dict:
     return jsonify(battle_enemy)
 
 
-@battle_enemy_methods.route("/battle_enemies/<battle_id>/<enemy_id>", methods=["DELETE"])
+@battle_enemy_methods.route("/battle-enemies/<battle_id>/<enemy_id>", methods=["DELETE"])
 def delete_battle_enemy(battle_id: int, enemy_id: int) -> dict:
     result = db_actions.crud(
         action="delete",

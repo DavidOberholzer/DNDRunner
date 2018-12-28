@@ -6,7 +6,7 @@ from dnd_runner import db_actions, models
 campaign_player_methods = Blueprint("campaign_players", __name__)
 
 
-@campaign_player_methods.route("/campaign_players", methods=["GET"])
+@campaign_player_methods.route("/campaign-players", methods=["GET"])
 def get_campaign_players() -> dict:
     campaign_players = db_actions.crud(
         action="list",
@@ -18,7 +18,7 @@ def get_campaign_players() -> dict:
     return jsonify(campaign_players)
 
 
-@campaign_player_methods.route("/campaign_players/<campaign_id>/<player_id>", methods=["GET"])
+@campaign_player_methods.route("/campaign-players/<campaign_id>/<player_id>", methods=["GET"])
 def get_campaign_player(campaign_id: int, player_id: int) -> dict:
     campaign_player = db_actions.crud(
         action="read",
@@ -31,7 +31,7 @@ def get_campaign_player(campaign_id: int, player_id: int) -> dict:
     return jsonify(campaign_player)
 
 
-@campaign_player_methods.route("/campaign_players", methods=["POST"])
+@campaign_player_methods.route("/campaign-players", methods=["POST"])
 def add_campaign_player() -> dict:
     data = request.json
     campaign_player = db_actions.crud(
@@ -42,7 +42,7 @@ def add_campaign_player() -> dict:
     return jsonify(campaign_player)
 
 
-@campaign_player_methods.route("/campaign_players/<campaign_id>/<player_id>", methods=["POST"])
+@campaign_player_methods.route("/campaign-players/<campaign_id>/<player_id>", methods=["POST"])
 def update_campaign_player(campaign_id: int, player_id: int) -> dict:
     data = request.json
     campaign_player = db_actions.crud(
@@ -57,7 +57,7 @@ def update_campaign_player(campaign_id: int, player_id: int) -> dict:
     return jsonify(campaign_player)
 
 
-@campaign_player_methods.route("/campaign_players/<campaign_id>/<player_id>", methods=["DELETE"])
+@campaign_player_methods.route("/campaign-players/<campaign_id>/<player_id>", methods=["DELETE"])
 def delete_campaign_player(campaign_id: int, player_id: int) -> dict:
     result = db_actions.crud(
         action="delete",
