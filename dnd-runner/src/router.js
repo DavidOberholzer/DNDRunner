@@ -1,29 +1,24 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import CampaignScreen from './components/CampaignScreen';
-import CampaignSelect from './components/CampaignSelect';
+import NoCampaign from './components/NoCampaign';
+import NavBar from './components/NavBar';
 
 const DnDRunnerRouter = () => (
+    <div style={{ height: '100%' }}>
+        <Route exact path="/" component={NoCampaign} />
+        <Route path="/campaign/:id" component={CampaignScreen} />
+    </div>
+);
+
+const MainRouter = () => (
     <Router>
-        <div>
-            <Route exact path="/" component={CampaignSelect} />
-            <Route path="/campaign/:id" component={Campaign} />
+        <div style={{ height: '100%' }}>
+            <NavBar />
+            <DnDRunnerRouter />
         </div>
     </Router>
 );
 
-const Campaign = () => (
-    <div>
-        {/* <Navbar>
-            <Link to="/">
-                <NavbarItem>Campaigns</NavbarItem>
-            </Link>
-        </Navbar> */}
-        <div>
-            <CampaignScreen />
-        </div>
-    </div>
-);
-
-export default DnDRunnerRouter;
+export default MainRouter;

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
-import DnDRunnerRouter from './router';
+import MainRouter from './router';
 
 class App extends Component {
     render() {
-        return <DnDRunnerRouter />;
+        return <MainRouter />;
     }
 }
 

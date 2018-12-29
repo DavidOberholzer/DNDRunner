@@ -1,15 +1,13 @@
 import { combineReducers } from 'redux';
 
-import createReducer from './createReducers';
+import createMulitReducer from './createMultiReducer';
+import createSingleReducer from './createSingleReducer';
 
 export const runnerApp = combineReducers({
-    campaigns: createReducer('campaigns'),
-    players: createReducer('players'),
-    items: createReducer('items'),
-    battles: createReducer('battles'),
-    enemies: createReducer('enemies'),
-    battleEnemies: createReducer('battleEnemies'),
-    campaignBattles: createReducer('campaignBattle'),
-    campaignPlayers: createReducer('campaignPlayer'),
-    playerItems: createReducer('playerItems')
+    campaigns: createMulitReducer('campaign'),
+    campaign: createSingleReducer('campaign'),
+	players: createMulitReducer('player'),
+    battles: createMulitReducer('battle'),
+    battle: createSingleReducer('battle'),
+    enemies: createMulitReducer('enemy')
 });

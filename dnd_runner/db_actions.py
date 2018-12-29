@@ -15,7 +15,12 @@ class DBActions:
         return instance
 
     def list(self, model: DB.Model, **kwargs) -> list:
-        group = DB.session.query(model).filter_by(**kwargs["query"]).all()
+        query = DB.session.query(model)
+        if "ids" in kwargs["query"]:
+            ids = kwargs["query"]["ids"]
+            group = query.filter(model.id.in_(ids))
+        else:
+            group = query.filter_by(**kwargs["query"]).all()
         results = []
 
         for item in group:
