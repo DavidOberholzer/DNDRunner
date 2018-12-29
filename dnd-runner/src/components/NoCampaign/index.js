@@ -6,7 +6,7 @@ class NoCampaign extends Component {
 
     render() {
         return (
-            <div className="No-Campaign">
+            <div className="Column-Display">
                 <div>
                     <NatureIcon color="disabled" style={{ fontSize: 400 }} />
                 </div>

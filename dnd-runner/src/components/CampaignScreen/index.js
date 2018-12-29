@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
+import CharacterList from '../CharacterList';
+
 import genericAction from '../../actions';
 import { getRelated } from '../../api';
 import { isEmpty } from '../../utils';
@@ -29,7 +31,11 @@ export class CampaignScreen extends Component {
         if (this.state.redirect) {
             return <Redirect push to={this.state.redirect} />;
         }
-        return <div />;
+        return (
+            <div className="Row-Display">
+                {this.props.players && <CharacterList characters={this.props.players} />}
+            </div>
+        );
     }
 }
 
