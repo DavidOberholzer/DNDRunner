@@ -7,20 +7,20 @@ player_item_methods = Blueprint("player_items", __name__)
 
 
 @player_item_methods.route("/player-items", methods=["GET"])
-def get_player_items() -> dict:
-    player_items = db_actions.crud(
+def get_player_items() -> tuple:
+    player_items, status = db_actions.crud(
         action="list",
         model=models.PlayerItem,
         query={
             **request.args
         }
     )
-    return jsonify(player_items)
+    return jsonify(player_items), status
 
 
 @player_item_methods.route("/player-items/<player_id>/<item_id>", methods=["GET"])
-def get_player_item(player_id: int, item_id: int) -> dict:
-    player_item = db_actions.crud(
+def get_player_item(player_id: int, item_id: int) -> tuple:
+    player_item, status = db_actions.crud(
         action="read",
         model=models.PlayerItem,
         query={
@@ -28,38 +28,40 @@ def get_player_item(player_id: int, item_id: int) -> dict:
             "item_id": item_id
         }
     )
-    return jsonify(player_item)
+    return jsonify(player_item), status
 
 
 @player_item_methods.route("/player-items", methods=["POST"])
-def add_player_item() -> dict:
+def add_player_item() -> tuple:
     data = request.json
-    player_item = db_actions.crud(
+    player_item, status = db_actions.crud(
         action="create",
         model=models.PlayerItem,
-        data=data
+        data=data,
+        params=["player_id", "item_id"]
     )
-    return jsonify(player_item)
+    return jsonify(player_item), status
 
 
 @player_item_methods.route("/player-items/<player_id>/<item_id>", methods=["POST"])
-def update_player_item(player_id: int, item_id: int) -> dict:
+def update_player_item(player_id: int, item_id: int) -> tuple:
     data = request.json
-    player_item = db_actions.crud(
+    player_item, status = db_actions.crud(
         action="update",
         model=models.PlayerItem,
         query={
             "player_id": player_id,
             "item_id": item_id
         },
-        data=data
+        data=data,
+        params=["player_id", "item_id"]
     )
-    return jsonify(player_item)
+    return jsonify(player_item), status
 
 
 @player_item_methods.route("/player-items/<player_id>/<item_id>", methods=["DELETE"])
-def delete_player_item(player_id: int, item_id: int) -> dict:
-    result = db_actions.crud(
+def delete_player_item(player_id: int, item_id: int) -> tuple:
+    result, status = db_actions.crud(
         action="delete",
         model=models.PlayerItem,
         query={
@@ -67,4 +69,4 @@ def delete_player_item(player_id: int, item_id: int) -> dict:
             "item_id": item_id
         }
     )
-    return jsonify(result)
+    return jsonify(result), status

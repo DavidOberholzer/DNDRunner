@@ -8,11 +8,11 @@ import AddIcon from '@material-ui/icons/Add';
 class AddBox extends Component {
     render() {
         return (
-            <Card>
+            <Card style={{ margin: 10 }}>
                 <CardContent>
-                    <IconButton>
+                    <IconButton onClick={this.props.onClick}>
                         <AddIcon />
-                        <Typography variant="subheading">Add Player</Typography>
+                        <Typography variant="subheading">Add {this.props.resource}</Typography>
                     </IconButton>
                 </CardContent>
             </Card>

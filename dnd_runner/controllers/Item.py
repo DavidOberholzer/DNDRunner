@@ -7,61 +7,63 @@ item_methods = Blueprint("items", __name__)
 
 
 @item_methods.route("/items", methods=["GET"])
-def get_items() -> dict:
-    items = db_actions.crud(
+def get_items() -> tuple:
+    items, status = db_actions.crud(
         action="list",
         model=models.Item,
         query={
             **request.args
         }
     )
-    return jsonify(items)
+    return jsonify(items), status
 
 
 @item_methods.route("/items/<_id>", methods=["GET"])
-def get_item(_id: int) -> dict:
-    item = db_actions.crud(
+def get_item(_id: int) -> tuple:
+    item, status = db_actions.crud(
         action="read",
         model=models.Item,
         query={
             "id": _id,
         }
     )
-    return jsonify(item)
+    return jsonify(item), status
 
 
 @item_methods.route("/items", methods=["POST"])
-def add_item() -> dict:
+def add_item() -> tuple:
     data = request.json
-    item = db_actions.crud(
+    item, status = db_actions.crud(
         action="create",
         model=models.Item,
-        data=data
+        data=data,
+        params=["id"]
     )
-    return jsonify(item)
+    return jsonify(item), status
 
 
 @item_methods.route("/items/<_id>", methods=["POST"])
-def update_item(_id: int) -> dict:
+def update_item(_id: int) -> tuple:
     data = request.json
-    item = db_actions.crud(
+    item, status = db_actions.crud(
         action="update",
         model=models.Item,
         query={
-            "id": _id,
+            "id": _id
         },
-        data=data
+        data=data,
+        params=["id"]
     )
-    return jsonify(item)
+    return jsonify(item), status
 
 
 @item_methods.route("/items/<_id>", methods=["DELETE"])
-def delete_item(_id: int) -> dict:
-    result = db_actions.crud(
+def delete_item(_id: int) -> tuple:
+    result, status = db_actions.crud(
         action="delete",
         model=models.Item,
         query={
             "id": _id,
         }
     )
-    return jsonify(result)
+    return jsonify(result), status

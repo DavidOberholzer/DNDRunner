@@ -24,8 +24,9 @@ class Player(DB.Model):
     __tablename__ = "Player"
     id = DB.Column(DB.Integer, primary_key=True)
     name = DB.Column(DB.VARCHAR(30), unique=True, index=True, nullable=False)
-    health = DB.Column(DB.Integer)
-    carry_capacity = DB.Column(DB.Float)
+    health = DB.Column(DB.Integer, nullable=False)
+    current_health = DB.Column(DB.Integer, nullable=False)
+    carry_capacity = DB.Column(DB.Float, nullable=False)
     alive = DB.Column(DB.Boolean, default=True)
     created_at = DB.Column(DB.DateTime, default=datetime.utcnow(), nullable=False)
     updated_at = DB.Column(
@@ -60,7 +61,8 @@ class Enemy(DB.Model):
     __tablename__ = "Enemy"
     id = DB.Column(DB.Integer, primary_key=True)
     name = DB.Column(DB.VARCHAR(30), unique=True, index=True, nullable=False)
-    health = DB.Column(DB.Integer)
+    health = DB.Column(DB.Integer, nullable=True)
+    current_health = DB.Column(DB.Integer, nullable=True)
     alive = DB.Column(DB.Boolean, default=True)
     created_at = DB.Column(DB.DateTime, default=datetime.utcnow(), nullable=False)
     updated_at = DB.Column(
@@ -109,8 +111,8 @@ class BattleEnemy(DB.Model):
 
 class CampaignBattle(DB.Model):
     __tablename__ = "CampaignBattle"
-    campaign_id = DB.Column(DB.Integer, DB.ForeignKey("Battle.id"), primary_key=True)
-    battle_id = DB.Column(DB.Integer, DB.ForeignKey("Enemy.id"), primary_key=True)
+    campaign_id = DB.Column(DB.Integer, DB.ForeignKey("Campaign.id"), primary_key=True)
+    battle_id = DB.Column(DB.Integer, DB.ForeignKey("Battle.id"), primary_key=True)
     created_at = DB.Column(DB.DateTime, default=datetime.utcnow(), nullable=False)
     updated_at = DB.Column(
         DB.DateTime,

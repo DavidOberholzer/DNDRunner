@@ -1,3 +1,4 @@
+from sqlalchemy.exc import IntegrityError
 from project.app import DB
 
 CRUD = ["create", "read", "update", "delete", "list"]
@@ -36,15 +37,16 @@ class DBActions:
         instance = model(**kwargs["data"])
         DB.session.add(instance)
         DB.session.commit()
-        return self.to_dict(instance)
+        query = {param: getattr(instance, param) for param in kwargs["params"]}
+        return self.read(model, query=query)
 
     def update(self, model: DB.Model, **kwargs) -> dict:
         instance = model.query.filter_by(**kwargs["query"]).first_or_404()
         for key, value in kwargs["data"].items():
             setattr(instance, key, value)
-        result = self.to_dict(instance)
         DB.session.commit()
-        return result
+        query = {param: getattr(instance, param) for param in kwargs["params"]}
+        return self.read(model, query=query)
 
     @staticmethod
     def delete(model: DB.Model, **kwargs) -> dict:
@@ -57,12 +59,21 @@ class DBActions:
 runner = DBActions()
 
 
-def crud(action: str, model: DB.Model, query=None, data=None) -> dict:
+def crud(action: str, model: DB.Model, query=None, data=None, params=None) -> tuple:
     if action in CRUD:
-        return getattr(runner, action)(
-            model=model,
-            query=query,
-            data=data
-        )
+        try:
+            status = 200
+            result = getattr(runner, action)(
+                model=model,
+                query=query,
+                data=data,
+                params=params
+            )
+        except IntegrityError as e:
+            status = 400
+            result = {
+                "message": e._message()
+            }
+        return result, status
     else:
         raise Exception("Not a crud action")

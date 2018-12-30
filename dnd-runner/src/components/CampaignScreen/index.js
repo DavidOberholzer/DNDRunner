@@ -1,40 +1,62 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 
-import CharacterList from '../CharacterList';
+import GenericList from '../GenericList';
+import OptionList from '../OptionList';
+import NoCampaign from '../NoCampaign';
 
 import genericAction from '../../actions';
-import { getRelated } from '../../api';
 import { isEmpty } from '../../utils';
 
 export class CampaignScreen extends Component {
     state = {
-        redirect: null
+        mode: 'campaign'
     };
 
-    componentDidMount() {
-        if (isEmpty(this.props.campaign)) {
-            this.setState({ redirect: '/' });
-        } else {
-            Promise.all([
-                getRelated('players-in-campaign', this.props.match.params.id),
-                getRelated('battles-in-campaign', this.props.match.params.id)
-            ]).then(([players, battles]) => {
-                this.props.setPlayers(players);
-                this.props.setBattles(battles);
-            });
-        }
-    }
-
     render() {
-        if (this.state.redirect) {
-            return <Redirect push to={this.state.redirect} />;
-        }
-        return (
+        return !isEmpty(this.props.campaign) ? (
             <div className="Row-Display">
-                {this.props.players && <CharacterList characters={this.props.players} />}
+                {this.props.players && (
+                    <GenericList
+                        values={this.props.players}
+                        parentName="campaign"
+                        resource="players"
+                        resourceName="Player"
+                        fields={[
+                            { name: 'name', type: 'text', label: 'Name', value: '' },
+                            { name: 'health', type: 'number', label: 'Health', value: 0 },
+                            {
+                                name: 'current_health',
+                                type: 'number',
+                                label: 'Current Health',
+                                value: 0
+                            },
+                            {
+                                name: 'carry_capacity',
+                                type: 'number',
+                                label: 'Carry Capacity',
+                                value: 0
+                            }
+                        ]}
+                        character
+                    />
+                )}
+                <OptionList mode={this.state.mode} />
+                {this.props.battles && (
+                    <GenericList
+                        values={this.props.battles}
+                        parentName="campaign"
+                        resource="battles"
+                        resourceName="Battle"
+                        fields={[
+                            { name: 'name', type: 'text', label: 'Name', value: '' },
+                            { name: 'description', type: 'text', label: 'Description', value: '' }
+                        ]}
+                    />
+                )}
             </div>
+        ) : (
+            <NoCampaign />
         );
     }
 }
@@ -46,8 +68,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    setPlayers: players => dispatch(genericAction('SET_MANY', 'PLAYER', players)),
-    setBattles: battles => dispatch(genericAction('SET_MANY', 'BATTLE', battles)),
     setBattle: battle => dispatch(genericAction('SET', 'BATTLE', battle))
 });
 

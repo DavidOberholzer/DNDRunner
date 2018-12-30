@@ -5,18 +5,19 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 
-import AddBox from '../AddBox';
-
 import { isEmpty } from '../../utils';
 
 class CharacterList extends Component {
     render() {
         const { characters } = this.props;
         return (
-            <div className="Column-Display" style={{ width: '33%' }}>
+            <React.Fragment>
+                <Typography style={{ margin: '15px' }} variant="headline">
+                    Players
+                </Typography>
                 {!isEmpty(characters) &&
                     Object.values(characters).map(character => (
-                        <Card>
+                        <Card key={character.id} style={{ margin: 10 }}>
                             <CardHeader
                                 avatar={<Avatar>{character.name.charAt(0)}</Avatar>}
                                 title={character.name}
@@ -24,13 +25,12 @@ class CharacterList extends Component {
                             />
                             <CardContent>
                                 <Typography variant="subheading" component="h3">
-                                    Health: {character.health}
+                                    Health: {character.health} / {character.current_health}
                                 </Typography>
                             </CardContent>
                         </Card>
-                    ))}
-                <AddBox />
-            </div>
+                    ))}{' '}
+            </React.Fragment>
         );
     }
 }

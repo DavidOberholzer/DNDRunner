@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: da0b316528c0
+Revision ID: c75ce28a1eb5
 Revises: 
-Create Date: 2018-12-28 18:31:07.703066
+Create Date: 2018-12-30 22:55:56.251064
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'da0b316528c0'
+revision = 'c75ce28a1eb5'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -40,6 +40,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.VARCHAR(length=30), nullable=False),
     sa.Column('health', sa.Integer(), nullable=True),
+    sa.Column('current_health', sa.Integer(), nullable=True),
     sa.Column('alive', sa.Boolean(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
@@ -58,8 +59,9 @@ def upgrade():
     op.create_table('Player',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.VARCHAR(length=30), nullable=False),
-    sa.Column('health', sa.Integer(), nullable=True),
-    sa.Column('carry_capacity', sa.Float(), nullable=True),
+    sa.Column('health', sa.Integer(), nullable=False),
+    sa.Column('current_health', sa.Integer(), nullable=False),
+    sa.Column('carry_capacity', sa.Float(), nullable=False),
     sa.Column('alive', sa.Boolean(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
@@ -80,8 +82,8 @@ def upgrade():
     sa.Column('battle_id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
-    sa.ForeignKeyConstraint(['battle_id'], ['Enemy.id'], ),
-    sa.ForeignKeyConstraint(['campaign_id'], ['Battle.id'], ),
+    sa.ForeignKeyConstraint(['battle_id'], ['Battle.id'], ),
+    sa.ForeignKeyConstraint(['campaign_id'], ['Campaign.id'], ),
     sa.PrimaryKeyConstraint('campaign_id', 'battle_id')
     )
     op.create_table('CampaignPlayer',

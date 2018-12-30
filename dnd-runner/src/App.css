@@ -33,8 +33,6 @@
 
 .Row-Display {
     display: flex;
-    align-items: center;
-    justify-content: center;
     flex-direction: row;
     height: 100%;
 }
@@ -45,4 +43,12 @@
     justify-content: center;
     flex-direction: column;
     height: 100%;
+}
+
+.Card-List {
+    width: 25%;
+}
+
+.List {
+    width: 50%;
 }

@@ -7,61 +7,63 @@ player_methods = Blueprint("players", __name__)
 
 
 @player_methods.route("/players", methods=["GET"])
-def get_players() -> dict:
-    players = db_actions.crud(
+def get_players() -> tuple:
+    players, status = db_actions.crud(
         action="list",
         model=models.Player,
         query={
             **request.args
         }
     )
-    return jsonify(players)
+    return jsonify(players), status
 
 
 @player_methods.route("/players/<_id>", methods=["GET"])
-def get_player(_id: int) -> dict:
-    player = db_actions.crud(
+def get_player(_id: int) -> tuple:
+    player, status = db_actions.crud(
         action="read",
         model=models.Player,
         query={
             "id": _id,
         }
     )
-    return jsonify(player)
+    return jsonify(player), status
 
 
 @player_methods.route("/players", methods=["POST"])
-def add_player() -> dict:
+def add_player() -> tuple:
     data = request.json
-    player = db_actions.crud(
+    player, status = db_actions.crud(
         action="create",
         model=models.Player,
-        data=data
+        data=data,
+        params=["id"]
     )
-    return jsonify(player)
+    return jsonify(player), status
 
 
 @player_methods.route("/players/<_id>", methods=["POST"])
-def update_player(_id: int) -> dict:
+def update_player(_id: int) -> tuple:
     data = request.json
-    player = db_actions.crud(
+    player, status = db_actions.crud(
         action="update",
         model=models.Player,
         query={
-            "id": _id,
+            "id": _id
         },
-        data=data
+        data=data,
+        params=["id"]
     )
-    return jsonify(player)
+    return jsonify(player), status
 
 
 @player_methods.route("/players/<_id>", methods=["DELETE"])
-def delete_player(_id: int) -> dict:
-    result = db_actions.crud(
+def delete_player(_id: int) -> tuple:
+    result, status = db_actions.crud(
         action="delete",
         model=models.Player,
         query={
             "id": _id,
         }
     )
-    return jsonify(result)
+    return jsonify(result), status
