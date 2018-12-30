@@ -13,7 +13,7 @@ const createMultiReducer = resource => (state = {}, action) => {
             };
         case `DELETE_${resource}`:
             return Object.entries(state).reduce((accumulator, [key, value]) => {
-                if (key !== action.payload) {
+                if (parseInt(key, 10) !== action.payload) {
                     accumulator[key] = value;
                 }
                 return accumulator;

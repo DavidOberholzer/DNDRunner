@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -10,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 
 import { isEmpty } from '../../utils';
+import genericAction from '../../actions';
 
 class BattleList extends Component {
     render() {
@@ -25,7 +27,7 @@ class BattleList extends Component {
                             <CardHeader
                                 avatar={<Avatar>{battle.name.charAt(0)}</Avatar>}
                                 action={
-                                    <IconButton>
+                                    <IconButton onClick={this.props.handleDelete(battle.id)}>
                                         <DeleteIcon />
                                     </IconButton>
                                 }
@@ -51,4 +53,15 @@ class BattleList extends Component {
     }
 }
 
-export default BattleList;
+const mapStateToProps = state => ({
+    battles: state.battles
+});
+
+const mapDispatchToProps = dispatch => ({
+    setBattle: battle => dispatch(genericAction('SET', 'BATTLE', battle))
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(BattleList);

@@ -11,6 +11,10 @@ const apiCalls = {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
+        }),
+    delete: ({ resource, id }) =>
+        fetch(`${apiURL}${resource}/${id}`, {
+            method: 'DELETE'
         })
 };
 

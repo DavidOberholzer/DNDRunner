@@ -22,7 +22,6 @@ class GenericList extends Component {
     };
 
     handleClose = async (data, newOne) => {
-        console.log(data);
         if (!isEmpty(data)) {
             try {
                 const resource = this.props.resource.slice(0, -1).toUpperCase();
@@ -58,6 +57,20 @@ class GenericList extends Component {
         }
     };
 
+    handleDelete = id => () => {
+        const resource = this.props.resource.slice(0, -1).toUpperCase();
+        apiCall('delete', {
+            resource: `${this.props.parentName}-${this.props.resource}`,
+            id: `${this.props[`${this.props.parentName}`].id}/${id}`
+        }).then(response => {
+            this.props.deleteValue(id, resource);
+            this.setState({
+                openNotification: true,
+                notification: `Deleted ${this.props.resourceName}`
+            });
+        });
+    };
+
     handleCloseNotification = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -79,9 +92,9 @@ class GenericList extends Component {
                     existing={this.props.resource}
                 />
                 {this.props.character ? (
-                    <CharacterList characters={values} />
+                    <CharacterList characters={values} handleDelete={this.handleDelete} />
                 ) : (
-                    <BattleList battles={values} />
+                    <BattleList handleDelete={this.handleDelete} />
                 )}
                 <AddBox resource={this.props.resourceName} onClick={this.handleOpen} />
                 <Notification
@@ -100,7 +113,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     addValue: (value, resource) => dispatch(genericAction('ADD', resource, value)),
-    addOne: (value, resource) => dispatch(genericAction('ADD', `ALL_${resource}`, value))
+    addOne: (value, resource) => dispatch(genericAction('ADD', `ALL_${resource}`, value)),
+    deleteValue: (id, resource) => dispatch(genericAction('DELETE', resource, id))
 });
 
 export default connect(
