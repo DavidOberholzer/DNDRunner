@@ -101,7 +101,7 @@ class GenericList extends Component {
                         back={this.props.back}
                     />
                 ) : (
-                    <BattleList handleDelete={this.handleDelete} />
+                    <BattleList handleDelete={this.handleDelete} fields={this.props.fields} />
                 )}
                 <AddBox resource={this.props.resourceName} onClick={this.handleOpen} />
                 <Notification

@@ -23,7 +23,6 @@ class CharacterList extends Component {
         super(props);
         this.state = {
             ...Object.values(props.characters).reduce((accumulator, character) => {
-                console.log(character);
                 accumulator[character.name] = false;
                 return accumulator;
             }, {})
@@ -46,7 +45,7 @@ class CharacterList extends Component {
                         pluralToSingular(this.props.resource).toUpperCase(),
                         response
                     );
-                    this.setState({ [this.props.characters[id].name]: false, error: null });
+                    this.setState({ [response.name]: false, error: null });
                 })
                 .catch(error => {
                     this.setState({ error: error.message });
