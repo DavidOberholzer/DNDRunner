@@ -13,14 +13,11 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Switch from '@material-ui/core/Switch';
 
-import apiCall from '../../api';
 import { isEmpty, titleCase } from '../../utils';
-import genericAction from '../../actions';
 
 class AddDialog extends Component {
     constructor(props) {
         super(props);
-        this.resourceName = titleCase(this.props.existing);
         this.state = {
             fields: this.initializeState(),
             existing: 0,
@@ -28,14 +25,8 @@ class AddDialog extends Component {
         };
     }
 
-    componentDidMount() {
-        if (this.props.existing && isEmpty(this.props.storeValues(this.resourceName))) {
-            apiCall('getAll', {
-                resource: this.props.existing
-            }).then(response => {
-                this.props.setAll(this.props.existing.toUpperCase().slice(0, -1), response);
-            });
-        }
+    componentWillReceiveProps() {
+        this.setState({ fields: this.initializeState() });
     }
 
     initializeState = () =>
@@ -101,6 +92,7 @@ class AddDialog extends Component {
     };
 
     render() {
+        this.resourceName = titleCase(this.props.existing);
         return (
             <Dialog open={this.props.open} onClose={this.handleClose(false)}>
                 <DialogTitle>{this.props.title}</DialogTitle>
@@ -175,9 +167,7 @@ const mapStateToProps = state => ({
     storeValues: resource => state[`all${resource}`]
 });
 
-const mapDispatchToProps = dispatch => ({
-    setAll: (resource, values) => dispatch(genericAction('SET_MANY', `ALL_${resource}`, values))
-});
+const mapDispatchToProps = dispatch => ({});
 
 export default connect(
     mapStateToProps,

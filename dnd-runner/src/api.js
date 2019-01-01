@@ -1,17 +1,19 @@
 const apiURL = process.env.REACT_APP_API_URL;
 
+const postHeaders = data => ({
+    method: 'POST',
+    headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+});
+
 const apiCalls = {
     getAll: ({ resource }) => fetch(`${apiURL}${resource}`),
     getRelated: ({ resource, id }) => fetch(`${apiURL}${resource}/${id}`),
-    addNew: ({ resource, data }) =>
-        fetch(`${apiURL}${resource}`, {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        }),
+    addNew: ({ resource, data }) => fetch(`${apiURL}${resource}`, postHeaders(data)),
+    update: ({ resource, id, data }) => fetch(`${apiURL}${resource}/${id}`, postHeaders(data)),
     delete: ({ resource, id }) =>
         fetch(`${apiURL}${resource}/${id}`, {
             method: 'DELETE'

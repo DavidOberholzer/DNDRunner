@@ -41,7 +41,7 @@ class NavBar extends Component {
                 data: data
             })
                 .then(campaign => {
-                    this.props.setCampaign(campaign);
+                    this.props.addCampaign(campaign);
                     this.setState({
                         open: false,
                         openNotification: true,
@@ -120,7 +120,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    setCampaign: campaign => dispatch(genericAction('SET', 'CAMPAIGN', campaign))
+    addCampaign: campaign => dispatch(genericAction('ADD', 'CAMPAIGN', campaign))
 });
 
 export default connect(

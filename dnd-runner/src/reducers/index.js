@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 
 import createMulitReducer from './createMultiReducer';
 import createSingleReducer from './createSingleReducer';
+import mode from './mode';
 
 export const runnerApp = combineReducers({
     campaigns: createMulitReducer('campaign'),
@@ -11,5 +12,7 @@ export const runnerApp = combineReducers({
     battles: createMulitReducer('battle'),
     allBattles: createMulitReducer('all_battle'),
     battle: createSingleReducer('battle'),
-    enemies: createMulitReducer('enemy')
+    enemies: createMulitReducer('enemy'),
+    allEnemies: createMulitReducer('all_enemy'),
+    mode
 });

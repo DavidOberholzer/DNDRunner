@@ -9,7 +9,7 @@ import Notification from '../Notification';
 
 import genericAction from '../../actions';
 import apiCall from '../../api';
-import { isEmpty } from '../../utils';
+import { isEmpty, pluralToSingular, titleCase } from '../../utils';
 
 class GenericList extends Component {
     state = {
@@ -24,21 +24,22 @@ class GenericList extends Component {
     handleClose = async (data, newOne) => {
         if (!isEmpty(data)) {
             try {
-                const resource = this.props.resource.slice(0, -1).toUpperCase();
+                const resource = pluralToSingular(this.props.resource);
+                const resourceUpper = resource.toUpperCase();
                 if (newOne) {
                     data = await apiCall('addNew', {
                         resource: this.props.resource,
                         data: data
                     });
-                    this.props.addOne(data, resource);
+                    this.props.addOne(data, resourceUpper);
                 }
 
-                this.props.addValue(data, resource);
+                this.props.addValue(data, resourceUpper);
 
                 await apiCall('addNew', {
                     resource: `${this.props.parentName}-${this.props.resource}`,
                     data: {
-                        [`${this.props.resource.slice(0, -1)}_id`]: data.id,
+                        [`${resource}_id`]: data.id,
                         [`${this.props.parentName}_id`]: this.props[`${this.props.parentName}`].id
                     }
                 });
@@ -58,7 +59,7 @@ class GenericList extends Component {
     };
 
     handleDelete = id => () => {
-        const resource = this.props.resource.slice(0, -1).toUpperCase();
+        const resource = pluralToSingular(this.props.resource).toUpperCase();
         apiCall('delete', {
             resource: `${this.props.parentName}-${this.props.resource}`,
             id: `${this.props[`${this.props.parentName}`].id}/${id}`
@@ -92,7 +93,13 @@ class GenericList extends Component {
                     existing={this.props.resource}
                 />
                 {this.props.character ? (
-                    <CharacterList characters={values} handleDelete={this.handleDelete} />
+                    <CharacterList
+                        characters={values}
+                        handleDelete={this.handleDelete}
+                        fields={this.props.fields}
+                        resource={titleCase(this.props.resource)}
+                        back={this.props.back}
+                    />
                 ) : (
                     <BattleList handleDelete={this.handleDelete} />
                 )}
@@ -108,7 +115,8 @@ class GenericList extends Component {
 }
 
 const mapStateToProps = state => ({
-    campaign: state.campaign
+    campaign: state.campaign,
+    battle: state.battle
 });
 
 const mapDispatchToProps = dispatch => ({

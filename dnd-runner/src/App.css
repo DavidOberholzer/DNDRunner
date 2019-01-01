@@ -37,6 +37,13 @@
     height: 100%;
 }
 
+.Card-Actions-Right {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
 .Column-Display {
     display: flex;
     align-items: center;

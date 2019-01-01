@@ -6,6 +6,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
 import genericAction from '../../actions';
+import { setMode } from '../../actions/mode';
 import apiCall from '../../api';
 import { isEmpty } from '../../utils';
 
@@ -14,17 +15,8 @@ class CampaignSelect extends Component {
         open: false
     };
 
-    componentDidMount() {
-        if (isEmpty(this.props.campaigns)) {
-            apiCall('getAll', {
-                resource: 'campaigns'
-            }).then(data => {
-                this.props.setCampaigns(data);
-            });
-        }
-    }
-
     handleSelect = id => () => {
+        this.props.setCampaignMode();
         this.props.setCampaign(this.props.campaigns[id]);
         Promise.all([
             apiCall('getRelated', {
@@ -39,7 +31,6 @@ class CampaignSelect extends Component {
             this.props.setPlayers(players);
             this.props.setBattles(battles);
         });
-        this.setState({ redirect: `/campaign/${id}` });
     };
 
     render() {
@@ -67,6 +58,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+    setCampaignMode: () => dispatch(setMode('campaign')),
     setCampaigns: campaigns => dispatch(genericAction('SET_MANY', 'CAMPAIGN', campaigns)),
     setCampaign: campaign => dispatch(genericAction('SET', 'CAMPAIGN', campaign)),
     setPlayers: players => dispatch(genericAction('SET_MANY', 'PLAYER', players)),
