@@ -22,10 +22,11 @@ const apiCalls = {
 
 const apiCall = (type, requestObject) => {
     return apiCalls[type](requestObject)
-        .then(response => {
+        .then(async response => {
             if (response.status !== 200) {
                 console.log('Looks like there was a problem. Status Code: ' + response.status);
-                throw Error(response.statusText);
+                const json = await response.json();
+                throw Error(json.message);
             }
 
             return response.json();

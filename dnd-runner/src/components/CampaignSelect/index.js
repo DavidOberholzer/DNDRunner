@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+
+import TerrainIcon from '@material-ui/icons/Terrain';
 
 import genericAction from '../../actions';
 import { setMode } from '../../actions/mode';
@@ -37,6 +41,13 @@ class CampaignSelect extends Component {
         const { campaigns } = this.props;
         return (
             <List>
+                <ListItem>
+                    <ListItemIcon>
+                        <TerrainIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Campaigns" secondary="Select from below" />
+                </ListItem>
+                <Divider />
                 {!isEmpty(campaigns) ? (
                     Object.values(campaigns).map(campaign => (
                         <ListItem key={campaign.id} button onClick={this.handleSelect(campaign.id)}>

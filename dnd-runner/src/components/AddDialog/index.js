@@ -32,15 +32,13 @@ class AddDialog extends Component {
     initializeState = () =>
         this.props.fields.reduce((accumulator, field) => {
             accumulator[field.name] = {
-                type: field.type,
-                label: field.label,
-                value: field.value
+                ...field
             };
             return accumulator;
         }, {});
 
     handleChange = event => {
-        const name = event.target.id;
+        const name = event.target.id || event.target.name;
         const value = event.target.value;
         this.setState({
             fields: {
@@ -53,7 +51,7 @@ class AddDialog extends Component {
         });
     };
 
-    handleChangeSelect = event => {
+    handleChangeExisting = event => {
         this.setState({ existing: event.target.value });
     };
 
@@ -70,7 +68,16 @@ class AddDialog extends Component {
             !isEmpty(this.props.storeValues(this.resourceName))
         ) {
             if (this.state.existing) {
-                data = add && this.props.storeValues(this.resourceName)[this.state.existing];
+                data = Object.entries(this.state.fields).reduce((accumulator, [name, details]) => {
+                    if (details.global) {
+                        accumulator[name] = details.value;
+                    }
+                    return accumulator;
+                }, {});
+                data = add && {
+                    ...this.props.storeValues(this.resourceName)[this.state.existing],
+                    ...data
+                };
             }
         } else {
             data =
@@ -103,13 +110,42 @@ class AddDialog extends Component {
                         noValidate
                         autoComplete="off"
                     >
+                        {Object.entries(this.state.fields).map(([name, details]) => {
+                            if (details.global) {
+                                return (
+                                    <FormControl key={name}>
+                                        <Select
+                                            value={details.value}
+                                            onChange={this.handleChange}
+                                            inputProps={{
+                                                name: details.name,
+                                                id: details.name
+                                            }}
+                                        >
+                                            <MenuItem value={0}>None</MenuItem>
+                                            {(Array.isArray(details.values)
+                                                ? details.values
+                                                : Object.values(
+                                                      this.props.storeValues(details.values)
+                                                  )
+                                            ).map(choice => (
+                                                <MenuItem key={choice.id} value={choice.id}>
+                                                    {choice.name}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                );
+                            }
+                            return null;
+                        })}
                         {this.props.existing &&
                         this.state.checkedExisting &&
                         !isEmpty(this.props.storeValues(this.resourceName)) ? (
                             <FormControl>
                                 <Select
                                     value={this.state.existing}
-                                    onChange={this.handleChangeSelect}
+                                    onChange={this.handleChangeExisting}
                                     inputProps={{
                                         name: 'existing',
                                         id: 'existing-simple'
@@ -126,17 +162,22 @@ class AddDialog extends Component {
                                 </Select>
                             </FormControl>
                         ) : (
-                            Object.entries(this.state.fields).map(([name, details]) => (
-                                <TextField
-                                    key={name}
-                                    id={name}
-                                    label={details.label}
-                                    type={details.type}
-                                    value={details.value}
-                                    onChange={this.handleChange}
-                                    style={{ margin: '10px' }}
-                                />
-                            ))
+                            Object.entries(this.state.fields).map(([name, details]) => {
+                                if (!details.global) {
+                                    return (
+                                        <TextField
+                                            key={name}
+                                            id={name}
+                                            label={details.label}
+                                            type={details.type}
+                                            value={details.value}
+                                            onChange={this.handleChange}
+                                            style={{ margin: '10px' }}
+                                        />
+                                    );
+                                }
+                                return null;
+                            })
                         )}
                     </form>
                     {this.props.existing && !isEmpty(this.props.storeValues(this.resourceName)) && (

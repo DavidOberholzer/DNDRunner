@@ -8,6 +8,7 @@ import NoCampaign from '../NoCampaign';
 import genericAction from '../../actions';
 import { setMode } from '../../actions/mode';
 import apiCall from '../../api';
+import { RESOURCE_FIELDS } from '../../constants';
 import { isEmpty, pluralToSingular } from '../../utils';
 
 export class CampaignScreen extends Component {
@@ -16,7 +17,7 @@ export class CampaignScreen extends Component {
     };
 
     componentDidMount() {
-        const allNames = ['players', 'battles', 'enemies'];
+        const allNames = ['players', 'battles', 'enemies', 'items'];
         Promise.all([
             apiCall('getAll', {
                 resource: 'campaigns'
@@ -54,26 +55,7 @@ export class CampaignScreen extends Component {
             parentName: isCampaignMode ? 'campaign' : 'battle',
             resource: isCampaignMode ? 'battles' : 'enemies',
             resourceName: isCampaignMode ? 'battle' : 'enemy',
-            fields: isCampaignMode
-                ? [
-                      { name: 'name', type: 'text', label: 'Name', value: '' },
-                      {
-                          name: 'description',
-                          type: 'text',
-                          label: 'Description',
-                          value: ''
-                      }
-                  ]
-                : [
-                      { name: 'name', type: 'text', label: 'Name', value: '' },
-                      { name: 'health', type: 'number', label: 'Health', value: 0 },
-                      {
-                          name: 'current_health',
-                          type: 'number',
-                          label: 'Current Health',
-                          value: 0
-                      }
-                  ],
+            fields: isCampaignMode ? RESOURCE_FIELDS.battle : RESOURCE_FIELDS.enemy,
             character: isCampaignMode ? false : true,
             back: isCampaignMode ? null : this.handleBack
         };
@@ -86,22 +68,7 @@ export class CampaignScreen extends Component {
                         parentName="campaign"
                         resource="players"
                         resourceName="Player"
-                        fields={[
-                            { name: 'name', type: 'text', label: 'Name', value: '' },
-                            { name: 'health', type: 'number', label: 'Health', value: 0 },
-                            {
-                                name: 'current_health',
-                                type: 'number',
-                                label: 'Current Health',
-                                value: 0
-                            },
-                            {
-                                name: 'carry_capacity',
-                                type: 'number',
-                                label: 'Carry Capacity',
-                                value: 0
-                            }
-                        ]}
+                        fields={RESOURCE_FIELDS.player}
                         character
                     />
                 )}

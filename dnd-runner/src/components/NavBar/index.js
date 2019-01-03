@@ -12,10 +12,12 @@ import AddIcon from '@material-ui/icons/Add';
 import AddDialog from '../AddDialog';
 import CampaignSelect from '../CampaignSelect';
 import Notification from '../Notification';
+import WarningDialog from '../WarningDialog';
 
 import genericAction from '../../actions';
 import apiCall from '../../api';
 import { isEmpty } from '../../utils';
+import { RESOURCE_FIELDS } from '../../constants';
 
 class NavBar extends Component {
     state = {
@@ -68,14 +70,12 @@ class NavBar extends Component {
     render() {
         return (
             <div>
+                <WarningDialog />
                 <AddDialog
                     title="Add a New Campaign"
                     open={this.state.open}
                     handleClose={this.handleClose}
-                    fields={[
-                        { name: 'name', type: 'text', label: 'Name', value: '' },
-                        { name: 'description', type: 'text', label: 'Description', value: '' }
-                    ]}
+                    fields={RESOURCE_FIELDS.campaign}
                     error={this.state.error}
                 />
                 <Drawer open={this.state.left} onClose={this.toggleDrawer(false)}>

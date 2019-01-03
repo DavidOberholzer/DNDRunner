@@ -41,8 +41,9 @@ class BattleList extends Component {
         });
     };
 
-    handleOpen = name => () => {
-        this.setState({ [name]: true });
+    handleOpen = data => () => {
+        this.props.setEdit(data);
+        this.setState({ [data.name]: true });
     };
 
     handleUpdate = (id, data) => {
@@ -80,6 +81,7 @@ class BattleList extends Component {
                                     data={battle}
                                     fields={this.props.fields}
                                     handleUpdate={this.handleUpdate}
+                                    resource="battles"
                                 />
                             )}
                             <CardHeader
@@ -108,7 +110,7 @@ class BattleList extends Component {
                                 <Button
                                     variant="contained"
                                     color="primary"
-                                    onClick={this.handleOpen(battle.name)}
+                                    onClick={this.handleOpen(battle)}
                                 >
                                     <EditIcon />
                                     Edit
@@ -129,6 +131,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+    setEdit: data => dispatch(genericAction('SET', 'EDIT', data)),
     setBattleMode: () => dispatch(setMode('battle')),
     setBattle: battle => dispatch(genericAction('SET', 'BATTLE', battle)),
     addBattle: battle => dispatch(genericAction('ADD', 'BATTLE', battle)),

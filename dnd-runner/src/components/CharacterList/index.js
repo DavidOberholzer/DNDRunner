@@ -29,8 +29,9 @@ class CharacterList extends Component {
         };
     }
 
-    handleOpen = name => () => {
-        this.setState({ [name]: true });
+    handleOpen = data => () => {
+        this.props.setEdit(data);
+        this.setState({ [data.name]: true });
     };
 
     handleUpdate = (id, data) => {
@@ -77,6 +78,7 @@ class CharacterList extends Component {
                                     data={character}
                                     fields={this.props.fields}
                                     handleUpdate={this.handleUpdate}
+                                    resource={this.props.resource}
                                 />
                             )}
                             <CardHeader
@@ -93,7 +95,7 @@ class CharacterList extends Component {
                                 <Button
                                     variant="contained"
                                     color="primary"
-                                    onClick={this.handleOpen(character.name)}
+                                    onClick={this.handleOpen(character)}
                                 >
                                     <EditIcon />
                                     Edit
@@ -116,6 +118,7 @@ class CharacterList extends Component {
 const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => ({
+    setEdit: data => dispatch(genericAction('SET', 'EDIT', data)),
     setCharacter: (resource, data) => dispatch(genericAction('ADD', resource, data))
 });
 

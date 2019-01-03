@@ -14,5 +14,8 @@ export const runnerApp = combineReducers({
     battle: createSingleReducer('battle'),
     enemies: createMulitReducer('enemy'),
     allEnemies: createMulitReducer('all_enemy'),
+    delete: createSingleReducer('delete'),
+    edit: createSingleReducer('edit'),
+    allItems: createMulitReducer('all_item'),
     mode
 });

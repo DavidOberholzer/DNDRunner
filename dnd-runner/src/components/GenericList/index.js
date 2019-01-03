@@ -59,16 +59,10 @@ class GenericList extends Component {
     };
 
     handleDelete = id => () => {
-        const resource = pluralToSingular(this.props.resource).toUpperCase();
-        apiCall('delete', {
-            resource: `${this.props.parentName}-${this.props.resource}`,
-            id: `${this.props[`${this.props.parentName}`].id}/${id}`
-        }).then(response => {
-            this.props.deleteValue(id, resource);
-            this.setState({
-                openNotification: true,
-                notification: `Deleted ${this.props.resourceName}`
-            });
+        this.props.setDelete({
+            ...this.props[this.props.resource][`${id}`],
+            parentName: this.props.parentName,
+            resource: this.props.resource
         });
     };
 
@@ -116,13 +110,16 @@ class GenericList extends Component {
 
 const mapStateToProps = state => ({
     campaign: state.campaign,
-    battle: state.battle
+    battle: state.battle,
+    battles: state.battles,
+    players: state.players,
+    enemies: state.enemies
 });
 
 const mapDispatchToProps = dispatch => ({
     addValue: (value, resource) => dispatch(genericAction('ADD', resource, value)),
     addOne: (value, resource) => dispatch(genericAction('ADD', `ALL_${resource}`, value)),
-    deleteValue: (id, resource) => dispatch(genericAction('DELETE', resource, id))
+    setDelete: data => dispatch(genericAction('SET', 'DELETE', data))
 });
 
 export default connect(

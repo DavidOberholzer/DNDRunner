@@ -5,7 +5,11 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+
 import TextField from '@material-ui/core/TextField';
+
+import RelatedList from '../RelatedList';
+import { pluralToSingular } from '../../utils';
 
 export class EditDialog extends Component {
     constructor(props) {
@@ -60,12 +64,13 @@ export class EditDialog extends Component {
 
     render() {
         const { data, error, onSubmit, open } = this.props;
+        const resource = pluralToSingular(this.props.resource);
         return (
             <Dialog open={open} onClose={this.handleClose(false)}>
                 <DialogTitle>
-                    Edit {this.props.resource}: {data.name}
+                    Edit {resource}: {data.name}
                 </DialogTitle>
-                <DialogContent>
+                <DialogContent style={{ minWidth: 500 }}>
                     <form
                         className="Column-Display"
                         onSubmit={onSubmit}
@@ -84,6 +89,20 @@ export class EditDialog extends Component {
                             />
                         ))}
                     </form>
+                    {Object.entries(data).map(([key, value]) => {
+                        if (Array.isArray(value)) {
+                            return (
+                                <RelatedList
+                                    key={key}
+                                    items={value}
+                                    parentName={resource}
+                                    resource={key}
+                                />
+                            );
+                        }
+                        return null;
+                    })}
+
                     {error && <DialogContentText>{error}</DialogContentText>}
                 </DialogContent>
                 <DialogActions>
@@ -91,7 +110,7 @@ export class EditDialog extends Component {
                         Close
                     </Button>
                     <Button onClick={this.handleClose(true)} color="primary" autoFocus>
-                        Edit
+                        Update
                     </Button>
                 </DialogActions>
             </Dialog>
