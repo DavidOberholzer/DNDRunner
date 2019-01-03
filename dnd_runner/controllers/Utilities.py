@@ -42,6 +42,9 @@ def players_in_campaign(_id: int) -> tuple:
                 "ids": [player["player_id"] for player in players]
             }
         )
+        filled_players = []
+        for player in players:
+            filled_players.append(fill_items(player))
     return jsonify(players), status
 
 
@@ -83,3 +86,25 @@ def enemies_in_battle(_id: int) -> tuple:
             }
         )
     return jsonify(enemies), status
+
+
+def fill_items(player: dict) -> dict:
+    player_items, status = db_actions.crud(
+        action="list",
+        model=models.PlayerItem,
+        query={
+            "player_id": player["id"]
+        }
+    )
+    player["items"] = []
+    for player_item in player_items:
+        item, status = db_actions.crud(
+            action="read",
+            model=models.Item,
+            query={
+                "id": player_item["item_id"]
+            }
+        )
+        if status == 200:
+            player["items"].append(item)
+    return player

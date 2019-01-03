@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 
 from dnd_runner import db_actions, models
-
+from dnd_runner.controllers.Utilities import fill_items
 
 player_methods = Blueprint("players", __name__)
 
@@ -15,6 +15,9 @@ def get_players() -> tuple:
             **request.args
         }
     )
+    filled_players = []
+    for player in players:
+        filled_players.append(fill_items(player))
     return jsonify(players), status
 
 
@@ -27,6 +30,7 @@ def get_player(_id: int) -> tuple:
             "id": _id,
         }
     )
+    player = fill_items(player)
     return jsonify(player), status
 
 
@@ -39,6 +43,7 @@ def add_player() -> tuple:
         data=data,
         params=["id"]
     )
+    player = fill_items(player)
     return jsonify(player), status
 
 
@@ -54,6 +59,7 @@ def update_player(_id: int) -> tuple:
         data=data,
         params=["id"]
     )
+    player = fill_items(player)
     return jsonify(player), status
 
 
