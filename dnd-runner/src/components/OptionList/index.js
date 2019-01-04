@@ -47,6 +47,8 @@ class OptionList extends Component {
                     }
                 });
 
+                data['amount'] = 1;
+
                 let player = this.props.players[player_id];
                 player.items = [...player.items, data];
 

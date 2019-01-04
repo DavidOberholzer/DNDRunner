@@ -24,7 +24,7 @@ class CharacterList extends Component {
 
     getWeight = character => {
         let weight = 0;
-        character.items.map(item => (weight += item.weight));
+        character.items.map(item => (weight += item.weight * item.amount));
         return weight;
     };
 
@@ -38,7 +38,12 @@ class CharacterList extends Component {
             <React.Fragment>
                 <Typography style={{ margin: this.props.back ? '15.5px' : '20px' }} variant="h5">
                     {this.props.back && (
-                        <Fab onClick={this.props.back} size="small" style={{ marginRight: 10 }}>
+                        <Fab
+                            onClick={this.props.back}
+                            size="small"
+                            color="primary"
+                            style={{ marginRight: 10 }}
+                        >
                             <BackIcon />
                         </Fab>
                     )}

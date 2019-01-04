@@ -9,6 +9,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
@@ -22,7 +23,7 @@ class AddDialog extends Component {
         super(props);
         this.state = {
             fields: this.initializeState(),
-            existing: 0,
+            existing: '',
             checkedExisting: true
         };
     }
@@ -94,7 +95,7 @@ class AddDialog extends Component {
         }
         this.setState({
             fields: this.initializeState(),
-            existing: 0,
+            existing: '',
             checkedExisting: true
         });
         this.props.existing ? this.props.handleClose(data, newOne) : this.props.handleClose(data);
@@ -115,7 +116,10 @@ class AddDialog extends Component {
                         {Object.entries(this.state.fields).map(([name, details]) => {
                             if (details.global) {
                                 return (
-                                    <FormControl key={name}>
+                                    <FormControl key={name} style={{ width: '100%' }}>
+                                        <InputLabel htmlFor={details.name}>
+                                            {details.label}
+                                        </InputLabel>
                                         <Select
                                             value={details.value}
                                             onChange={this.handleChange}
@@ -124,7 +128,9 @@ class AddDialog extends Component {
                                                 id: details.name
                                             }}
                                         >
-                                            <MenuItem value={0}>None</MenuItem>
+                                            <MenuItem value="">
+                                                <em>None</em>
+                                            </MenuItem>
                                             {(Array.isArray(details.values)
                                                 ? details.values
                                                 : Object.values(
@@ -144,7 +150,10 @@ class AddDialog extends Component {
                         {this.props.existing &&
                         this.state.checkedExisting &&
                         !isEmpty(this.props.storeValues(this.resourceName)) ? (
-                            <FormControl>
+                            <FormControl style={{ width: '100%' }}>
+                                <InputLabel htmlFor="existing-simple">
+                                    Existing {this.resourceName}
+                                </InputLabel>
                                 <Select
                                     value={this.state.existing}
                                     onChange={this.handleChangeExisting}
@@ -153,7 +162,6 @@ class AddDialog extends Component {
                                         id: 'existing-simple'
                                     }}
                                 >
-                                    <MenuItem value={0}>None</MenuItem>
                                     {Object.values(this.props.storeValues(this.resourceName)).map(
                                         choice => (
                                             <MenuItem key={choice.id} value={choice.id}>
@@ -201,7 +209,7 @@ class AddDialog extends Component {
                                 checked={this.state.checkedExisting}
                                 onChange={this.handleSwitch}
                             />
-                            <Typography>Existing/New</Typography>
+                            <Typography>New/Existing</Typography>
                         </div>
                     )}
                     {this.props.error && <DialogContentText>{this.props.error}</DialogContentText>}

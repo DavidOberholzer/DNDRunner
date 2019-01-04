@@ -9,34 +9,74 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 
+import AddIcon from '@material-ui/icons/Add';
 import BasketIcon from '@material-ui/icons/ShoppingBasketTwoTone';
-import DeleteIcon from '@material-ui/icons/Clear';
+import RemoveIcon from '@material-ui/icons/Remove';
 
 import genericAction from '../../actions';
 import apiCall from '../../api';
 import { titleCase } from '../../utils';
 
 class RelatedList extends Component {
-    handleDelete = id => () => {
+    handleAdd = (id, amount) => () => {
         let { parentName, resource } = this.props;
         parentName = parentName.toLowerCase();
-        const resourceName = resource.toUpperCase();
-
-        apiCall('delete', {
+        apiCall('update', {
             resource: `${parentName}-${resource}`,
-            id: `${this.props.edit.data.id}/${id}`
+            id: `${this.props.edit.data.id}/${id}`,
+            data: { amount: ++amount }
         }).then(response => {
             let newValue = this.props.edit.data;
-            newValue[resource] = newValue[resource].filter(value => value.id !== id);
-            this.props.replaceValue(newValue, parentName);
+            newValue[resource] = newValue[resource].map(value => {
+                if (value.id === id) {
+                    value.amount = amount;
+                }
+                return value;
+            });
+            this.props.replaceValue(newValue, parentName.toUpperCase());
             this.props.setEdit({
                 ...this.props.edit,
                 data: newValue
             });
-            this.setState({
-                openNotification: true,
-                notification: `Deleted '${resourceName}'`
+        });
+    };
+
+    handleDelete = (id, amount) => async () => {
+        amount--;
+        let { parentName, resource } = this.props;
+        parentName = parentName.toLowerCase();
+        const resourceName = resource.toUpperCase();
+        let newValue = {};
+
+        if (amount === 0) {
+            await apiCall('delete', {
+                resource: `${parentName}-${resource}`,
+                id: `${this.props.edit.data.id}/${id}`
             });
+            newValue = this.props.edit.data;
+            newValue[resource] = newValue[resource].filter(value => value.id !== id);
+        } else {
+            apiCall('update', {
+                resource: `${parentName}-${resource}`,
+                id: `${this.props.edit.data.id}/${id}`,
+                data: { amount }
+            });
+            newValue = this.props.edit.data;
+            newValue[resource] = newValue[resource].map(value => {
+                if (value.id === id) {
+                    value.amount = amount;
+                }
+                return value;
+            });
+        }
+        this.props.replaceValue(newValue, parentName.toUpperCase());
+        this.props.setEdit({
+            ...this.props.edit,
+            data: newValue
+        });
+        this.setState({
+            openNotification: true,
+            notification: `Deleted '${resourceName}'`
         });
     };
 
@@ -58,10 +98,16 @@ class RelatedList extends Component {
                     {this.props.items.length ? (
                         this.props.items.map(item => (
                             <ListItem key={item.id} button>
-                                <ListItemText primary={item.name} secondary={`${item.weight}kg`} />
+                                <ListItemText
+                                    primary={`${item.amount} x ${item.name}`}
+                                    secondary={`${item.weight}kg`}
+                                />
                                 <ListItemSecondaryAction>
-                                    <IconButton onClick={this.handleDelete(item.id)}>
-                                        <DeleteIcon />
+                                    <IconButton onClick={this.handleAdd(item.id, item.amount)}>
+                                        <AddIcon />
+                                    </IconButton>
+                                    <IconButton onClick={this.handleDelete(item.id, item.amount)}>
+                                        <RemoveIcon />
                                     </IconButton>
                                 </ListItemSecondaryAction>
                             </ListItem>

@@ -57,7 +57,7 @@ export const RESOURCE_FIELDS = {
             name: 'player_id',
             type: 'select',
             label: 'Player',
-            value: 0,
+            value: '',
             values: 'Players',
             global: true
         },

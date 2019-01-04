@@ -96,15 +96,17 @@ def fill_items(player: dict) -> dict:
             "player_id": player["id"]
         }
     )
-    player["items"] = []
-    for player_item in player_items:
-        item, status = db_actions.crud(
-            action="read",
-            model=models.Item,
-            query={
-                "id": player_item["item_id"]
-            }
-        )
-        if status == 200:
-            player["items"].append(item)
+    amounts = {x["item_id"]: x["amount"] for x in player_items}
+    items, status = db_actions.crud(
+        action="list",
+        model=models.Item,
+        query={
+            "ids": [player_item["item_id"] for player_item in player_items]
+        }
+    )
+    final_items = []
+    for item in items:
+        item["amount"] = amounts[item["id"]]
+        final_items.append(item)
+    player["items"] = final_items
     return player

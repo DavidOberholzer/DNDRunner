@@ -9,7 +9,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import EditIcon from '@material-ui/icons/Edit';
-import ViewIcon from '@material-ui/icons/Visibility';
+import ManageIcon from '@material-ui/icons/Build';
 
 import apiCall from '../../api';
 import { isEmpty } from '../../utils';
@@ -59,7 +59,7 @@ class BattleList extends Component {
                                     color="primary"
                                     onClick={this.handleView(battle.id)}
                                 >
-                                    <ViewIcon />
+                                    <ManageIcon />
                                     Manage
                                 </Button>
                                 <Button
