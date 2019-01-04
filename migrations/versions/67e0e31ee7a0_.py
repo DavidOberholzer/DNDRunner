@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: c75ce28a1eb5
+Revision ID: 67e0e31ee7a0
 Revises: 
-Create Date: 2018-12-30 22:55:56.251064
+Create Date: 2019-01-04 13:44:24.368223
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c75ce28a1eb5'
+revision = '67e0e31ee7a0'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -31,6 +31,8 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.VARCHAR(length=30), nullable=False),
     sa.Column('description', sa.VARCHAR(length=500), nullable=True),
+    sa.Column('time_of_day', sa.Time(), nullable=False),
+    sa.Column('day', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('id')
@@ -50,7 +52,7 @@ def upgrade():
     op.create_table('Item',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.VARCHAR(length=30), nullable=False),
-    sa.Column('weight', sa.Float(), nullable=True),
+    sa.Column('weight', sa.Float(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('id')
@@ -98,6 +100,7 @@ def upgrade():
     op.create_table('PlayerItem',
     sa.Column('player_id', sa.Integer(), nullable=False),
     sa.Column('item_id', sa.Integer(), nullable=False),
+    sa.Column('amount', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['item_id'], ['Item.id'], ),

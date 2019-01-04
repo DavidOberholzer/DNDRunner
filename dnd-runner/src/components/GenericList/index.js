@@ -93,6 +93,7 @@ class GenericList extends Component {
                         fields={this.props.fields}
                         resource={titleCase(this.props.resource)}
                         back={this.props.back}
+                        parent={this.props.parent}
                     />
                 ) : (
                     <BattleList handleDelete={this.handleDelete} fields={this.props.fields} />

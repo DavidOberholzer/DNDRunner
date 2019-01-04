@@ -24,12 +24,15 @@ class RelatedList extends Component {
 
         apiCall('delete', {
             resource: `${parentName}-${resource}`,
-            id: `${this.props.edit.id}/${id}`
+            id: `${this.props.edit.data.id}/${id}`
         }).then(response => {
-            let newValue = this.props.edit;
+            let newValue = this.props.edit.data;
             newValue[resource] = newValue[resource].filter(value => value.id !== id);
-			this.props.replaceValue(newValue, parentName);
-			this.props.setEdit(newValue);
+            this.props.replaceValue(newValue, parentName);
+            this.props.setEdit({
+                ...this.props.edit,
+                data: newValue
+            });
             this.setState({
                 openNotification: true,
                 notification: `Deleted '${resourceName}'`
@@ -40,10 +43,12 @@ class RelatedList extends Component {
     render() {
         const resourceName = titleCase(this.props.resource);
         return (
-            <Card>
+            <Card style={{ margin: 10 }}>
                 <List>
                     <ListItem>
-                        <ListItemText primary={`${this.props.parentName} ${resourceName}`} />
+                        <ListItemText
+                            primary={`${titleCase(this.props.parentName)} ${resourceName}`}
+                        />
                         <ListItemIcon>
                             <BasketIcon />
                         </ListItemIcon>
@@ -77,7 +82,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-	setEdit: data => dispatch(genericAction('SET', 'EDIT', data)),
+    setEdit: data => dispatch(genericAction('SET', 'EDIT', data)),
     replaceValue: (value, resource) => dispatch(genericAction('ADD', resource, value))
 });
 

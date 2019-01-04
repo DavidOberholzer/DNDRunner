@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Card from '@material-ui/core/Card';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -84,14 +85,16 @@ class OptionList extends Component {
                     error={this.state.error}
                     existing="items"
                 />
-                <Typography style={{ margin: '15px' }} variant="headline">
+                <Typography style={{ margin: '20px' }} variant="h5">
                     Game Options
                 </Typography>
-                <List>
-                    <ListItem button onClick={this.handleOpen}>
-                        <ListItemText primary="Give Player Item" />
-                    </ListItem>
-                </List>
+                <Card>
+                    <List>
+                        <ListItem button onClick={this.handleOpen}>
+                            <ListItemText primary="Give Player Item" />
+                        </ListItem>
+                    </List>
+                </Card>
                 <Notification
                     open={this.state.openNotification}
                     message={this.state.notification}

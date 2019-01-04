@@ -12,7 +12,7 @@ class AddBox extends Component {
                 <CardContent>
                     <IconButton onClick={this.props.onClick}>
                         <AddIcon />
-                        <Typography variant="subheading">Add {this.props.resource}</Typography>
+                        <Typography variant="subtitle1">Add {this.props.resource}</Typography>
                     </IconButton>
                 </CardContent>
             </Card>

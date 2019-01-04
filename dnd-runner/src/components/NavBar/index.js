@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import AddIcon from '@material-ui/icons/Add';
+import TimeIcon from '@material-ui/icons/AccessTimeRounded';
 
 import AddDialog from '../AddDialog';
 import CampaignSelect from '../CampaignSelect';
@@ -97,9 +98,22 @@ class NavBar extends Component {
                         >
                             <MenuIcon />
                         </IconButton>
-                        <Typography variant="title" color="inherit" style={{ flexGrow: 1 }}>
+                        <Typography
+                            variant="h6"
+                            color="inherit"
+                            style={{
+                                width: '13%',
+                                flexGrow: !isEmpty(this.props.campaign) ? 0.47 : 1
+                            }}
+                        >
                             {!isEmpty(this.props.campaign) ? this.props.campaign.name : 'Campaigns'}
                         </Typography>
+                        {!isEmpty(this.props.campaign) && (
+                            <Typography color="inherit" variant="h6" style={{ flexGrow: 0.6 }}>
+                                Game Time <TimeIcon fontSize="small" />{' '}
+                                {this.props.campaign.time_of_day} Day {this.props.campaign.day}
+                            </Typography>
+                        )}
                         <Button color="inherit" onClick={this.handleOpen}>
                             Add Campaign <AddIcon />
                         </Button>

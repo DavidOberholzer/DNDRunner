@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
@@ -164,7 +166,20 @@ class AddDialog extends Component {
                         ) : (
                             Object.entries(this.state.fields).map(([name, details]) => {
                                 if (!details.global) {
-                                    return (
+                                    return details.type === 'boolean' ? (
+                                        <FormControlLabel
+                                            key={name}
+                                            control={
+                                                <Checkbox
+                                                    id={name}
+                                                    checked={details.value}
+                                                    onChange={this.handleChange}
+                                                />
+                                            }
+                                            label={details.label}
+                                            style={{ marginLeft: 0 }}
+                                        />
+                                    ) : (
                                         <TextField
                                             key={name}
                                             id={name}
@@ -172,7 +187,7 @@ class AddDialog extends Component {
                                             type={details.type}
                                             value={details.value}
                                             onChange={this.handleChange}
-                                            style={{ margin: '10px' }}
+                                            style={{ margin: '10px', width: '100%' }}
                                         />
                                     );
                                 }

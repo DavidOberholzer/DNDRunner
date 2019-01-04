@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Card from '@material-ui/core/Card';
 
+import EditDialog from '../EditDialog';
 import GenericList from '../GenericList';
 import OptionList from '../OptionList';
 import NoCampaign from '../NoCampaign';
@@ -9,7 +11,7 @@ import genericAction from '../../actions';
 import { setMode } from '../../actions/mode';
 import apiCall from '../../api';
 import { RESOURCE_FIELDS } from '../../constants';
-import { isEmpty, pluralToSingular } from '../../utils';
+import { isEmpty, pluralToSingular, singularToPlural } from '../../utils';
 
 export class CampaignScreen extends Component {
     state = {
@@ -42,6 +44,28 @@ export class CampaignScreen extends Component {
         });
     }
 
+    handleUpdate = (id, data) => {
+        if (!isEmpty(data)) {
+            apiCall('update', {
+                resource: singularToPlural(this.props.edit.resource),
+                id,
+                data
+            })
+                .then(response => {
+                    this.props.setThing(this.props.edit.resource.toUpperCase(), response);
+                    this.props.clearEdit();
+                })
+                .catch(error => {
+                    this.props.setEdit({
+                        ...this.props.edit,
+                        error: error.message
+                    });
+                });
+        } else {
+            this.props.clearEdit();
+        }
+    };
+
     handleBack = () => {
         this.props.clearEnemies();
         this.props.setCampaignMode();
@@ -57,11 +81,22 @@ export class CampaignScreen extends Component {
             resourceName: isCampaignMode ? 'battle' : 'enemy',
             fields: isCampaignMode ? RESOURCE_FIELDS.battle : RESOURCE_FIELDS.enemy,
             character: isCampaignMode ? false : true,
-            back: isCampaignMode ? null : this.handleBack
+            back: isCampaignMode ? null : this.handleBack,
+            parent: isCampaignMode ? null : this.props.battle
         };
 
         return !isEmpty(this.props.campaign) ? (
-            <div className="Row-Display">
+            <Card className="Row-Display">
+                {!isEmpty(this.props.edit) && (
+                    <EditDialog
+                        open={!isEmpty(this.props.edit)}
+                        data={this.props.edit.data}
+                        fields={this.props.edit.fields}
+                        handleUpdate={this.handleUpdate}
+                        resource={this.props.edit.resource}
+                        error={this.props.edit.error}
+                    />
+                )}
                 {this.props.players && (
                     <GenericList
                         values={this.props.players}
@@ -74,7 +109,7 @@ export class CampaignScreen extends Component {
                 )}
                 <OptionList mode={this.state.mode} />
                 {listProps.values && <GenericList {...listProps} />}
-            </div>
+            </Card>
         ) : (
             <NoCampaign />
         );
@@ -86,15 +121,20 @@ const mapStateToProps = state => ({
     campaign: state.campaign,
     players: state.players,
     battles: state.battles,
+    battle: state.battle,
     enemies: state.enemies,
-    mode: state.mode
+    mode: state.mode,
+    edit: state.edit
 });
 
 const mapDispatchToProps = dispatch => ({
     clearEnemies: () => dispatch(genericAction('SET_MANY', 'ENEMY', [])),
+    clearEdit: () => dispatch(genericAction('CLEAR', 'EDIT', {})),
+    setAll: (resource, values) => dispatch(genericAction('SET_MANY', `ALL_${resource}`, values)),
     setCampaignMode: () => dispatch(setMode('campaign')),
     setCampaigns: campaigns => dispatch(genericAction('SET_MANY', 'CAMPAIGN', campaigns)),
-    setAll: (resource, values) => dispatch(genericAction('SET_MANY', `ALL_${resource}`, values))
+    setEdit: data => dispatch(genericAction('SET', 'EDIT', data)),
+    setThing: (resource, data) => dispatch(genericAction('ADD', resource, data))
 });
 
 export default connect(

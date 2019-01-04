@@ -6,110 +6,94 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
-import IconButton from '@material-ui/core/IconButton';
+import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
 import BackIcon from '@material-ui/icons/KeyboardBackspace';
 import Typography from '@material-ui/core/Typography';
 
-import EditDialog from '../EditDialog';
-
 import genericAction from '../../actions';
-import apiCall from '../../api';
 import { isEmpty, pluralToSingular } from '../../utils';
 import { CardActions } from '@material-ui/core';
+import { RESOURCE_FIELDS } from '../../constants';
 
 class CharacterList extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            ...Object.values(props.characters).reduce((accumulator, character) => {
-                accumulator[character.name] = false;
-                return accumulator;
-            }, {})
-        };
-    }
-
-    handleOpen = data => () => {
-        this.props.setEdit(data);
-        this.setState({ [data.name]: true });
+    handleOpenEdit = data => () => {
+        const resource = pluralToSingular(this.props.resource).toLowerCase();
+        this.props.setEdit({ data, resource, fields: RESOURCE_FIELDS[resource] });
     };
 
-    handleUpdate = (id, data) => {
-        if (!isEmpty(data)) {
-            apiCall('update', {
-                resource: this.props.resource.toLowerCase(),
-                id,
-                data
-            })
-                .then(response => {
-                    this.props.setCharacter(
-                        pluralToSingular(this.props.resource).toUpperCase(),
-                        response
-                    );
-                    this.setState({ [response.name]: false, error: null });
-                })
-                .catch(error => {
-                    this.setState({ error: error.message });
-                });
-        } else {
-            this.setState({ [this.props.characters[id].name]: false, error: null });
-        }
+    getWeight = character => {
+        let weight = 0;
+        character.items.map(item => (weight += item.weight));
+        return weight;
     };
 
     render() {
         const { characters } = this.props;
+        const title =
+            this.props.parent && this.props.parent.name
+                ? `${this.props.parent.name}: ${this.props.resource}`
+                : this.props.resource;
         return (
             <React.Fragment>
-                <Typography style={{ margin: '15px' }} variant="headline">
-                    {this.props.resource}
+                <Typography style={{ margin: this.props.back ? '15.5px' : '20px' }} variant="h5">
                     {this.props.back && (
-                        <IconButton onClick={this.props.back}>
+                        <Fab onClick={this.props.back} size="small" style={{ marginRight: 10 }}>
                             <BackIcon />
-                        </IconButton>
+                        </Fab>
                     )}
+                    {title}
                 </Typography>
 
                 {!isEmpty(characters) &&
-                    Object.values(characters).map(character => (
-                        <Card key={character.id} style={{ margin: 10 }}>
-                            {this.state[character.name] && (
-                                <EditDialog
-                                    open={this.state[character.name]}
-                                    data={character}
-                                    fields={this.props.fields}
-                                    handleUpdate={this.handleUpdate}
-                                    resource={this.props.resource}
+                    Object.values(characters).map(character => {
+                        const weight = character.items && this.getWeight(character);
+                        const encumbered = weight > character.carry_capacity;
+                        const dying = character.current_health <= 0;
+                        return (
+                            <Card key={character.id} style={{ margin: 10 }}>
+                                <CardHeader
+                                    avatar={<Avatar>{character.name.charAt(0)}</Avatar>}
+                                    title={character.name}
+                                    subheader={
+                                        !character.alive ? 'Dead' : dying ? 'Dying' : 'Alive'
+                                    }
                                 />
-                            )}
-                            <CardHeader
-                                avatar={<Avatar>{character.name.charAt(0)}</Avatar>}
-                                title={character.name}
-                                subheader={character.alive ? 'Alive' : 'Dead'}
-                            />
-                            <CardContent>
-                                <Typography variant="subheading" component="h3">
-                                    Health: {character.current_health} / {character.health}
-                                </Typography>
-                            </CardContent>
-                            <CardActions style={{ marginBottom: '10px' }}>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={this.handleOpen(character)}
-                                >
-                                    <EditIcon />
-                                    Edit
-                                </Button>
-                                <Button
-                                    variant="contained"
-                                    color="secondary"
-                                    onClick={this.props.handleDelete(character.id)}
-                                >
-                                    <DeleteIcon /> Delete
-                                </Button>
-                            </CardActions>
-                        </Card>
-                    ))}
+                                <CardContent>
+                                    <Typography variant="subtitle1" component="h3">
+                                        Health: {character.current_health} / {character.health}
+                                    </Typography>
+                                    {weight !== undefined && (
+                                        <Typography
+                                            variant="subtitle1"
+                                            component="h3"
+                                            color={encumbered ? `secondary` : `default`}
+                                        >
+                                            Carrying Weight: {weight} / {character.carry_capacity}
+                                            {encumbered && ` - Encumbered`}
+                                        </Typography>
+                                    )}
+                                </CardContent>
+                                <CardActions style={{ marginBottom: '10px' }}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={this.handleOpenEdit(character)}
+                                    >
+                                        <EditIcon />
+                                        Edit
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        onClick={this.props.handleDelete(character.id)}
+                                    >
+                                        <DeleteIcon /> Delete
+                                    </Button>
+                                </CardActions>
+                            </Card>
+                        );
+                    })}
             </React.Fragment>
         );
     }
@@ -118,8 +102,7 @@ class CharacterList extends Component {
 const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => ({
-    setEdit: data => dispatch(genericAction('SET', 'EDIT', data)),
-    setCharacter: (resource, data) => dispatch(genericAction('ADD', resource, data))
+    setEdit: data => dispatch(genericAction('SET', 'EDIT', data))
 });
 
 export default connect(

@@ -8,6 +8,8 @@ class Campaign(DB.Model):
     id = DB.Column(DB.Integer, primary_key=True)
     name = DB.Column(DB.VARCHAR(30), unique=True, index=True, nullable=False)
     description = DB.Column(DB.VARCHAR(500), nullable=True)
+    time_of_day = DB.Column(DB.Time, nullable=False)
+    day = DB.Column(DB.Integer, default=1, nullable=False)
     created_at = DB.Column(DB.DateTime, default=datetime.utcnow(), nullable=False)
     updated_at = DB.Column(
         DB.DateTime,
@@ -44,7 +46,7 @@ class Item(DB.Model):
     __tablename__ = "Item"
     id = DB.Column(DB.Integer, primary_key=True)
     name = DB.Column(DB.VARCHAR(30), unique=True, index=True, nullable=False)
-    weight = DB.Column(DB.Float)
+    weight = DB.Column(DB.Float, nullable=False)
     created_at = DB.Column(DB.DateTime, default=datetime.utcnow(), nullable=False)
     updated_at = DB.Column(
         DB.DateTime,
@@ -145,6 +147,7 @@ class PlayerItem(DB.Model):
     __tablename__ = "PlayerItem"
     player_id = DB.Column(DB.Integer, DB.ForeignKey("Player.id"), primary_key=True)
     item_id = DB.Column(DB.Integer, DB.ForeignKey("Item.id"), primary_key=True)
+    amount = DB.Column(DB.Integer, default=1)
     created_at = DB.Column(DB.DateTime, default=datetime.utcnow(), nullable=False)
     updated_at = DB.Column(
         DB.DateTime,

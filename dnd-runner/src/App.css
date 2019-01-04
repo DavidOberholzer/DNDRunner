@@ -52,6 +52,12 @@
     height: 100%;
 }
 
+.Column-Form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 .Card-List {
     width: 25%;
 }

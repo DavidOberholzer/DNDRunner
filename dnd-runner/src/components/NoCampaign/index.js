@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Card from '@material-ui/core/Card';
 
 import NatureIcon from '@material-ui/icons/NaturePeopleOutlined';
 
@@ -6,12 +7,12 @@ class NoCampaign extends Component {
 
     render() {
         return (
-            <div className="Column-Display">
+            <Card className="Column-Display">
                 <div>
                     <NatureIcon color="disabled" style={{ fontSize: 400 }} />
                 </div>
                 <p style={{ fontSize: 50, color: "#bdbdbd" }}>Select a Campaign To Play</p>
-            </div>
+            </Card>
         );
     }
 }
