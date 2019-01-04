@@ -62,14 +62,14 @@ export class EditDialog extends Component {
     };
 
     render() {
-        const { data, error, onSubmit, open, resource } = this.props;
+        const { data, error, open, resource } = this.props;
         return (
             <Dialog open={open} onClose={this.handleClose(false)}>
                 <DialogTitle>
                     Edit {resource}: {data.name}
                 </DialogTitle>
                 <DialogContent style={{ minWidth: 500 }}>
-                    <form className="Column-Form" onSubmit={onSubmit} noValidate autoComplete="off">
+                    <form className="Column-Form" noValidate autoComplete="off">
                         {Object.entries(this.state.fields).map(([name, details]) =>
                             details.type === 'boolean' ? (
                                 <FormControlLabel
@@ -93,6 +93,7 @@ export class EditDialog extends Component {
                                     value={details.value}
                                     onChange={this.handleChange}
                                     style={{ margin: '10px' }}
+                                    multiline
                                 />
                             )
                         )}

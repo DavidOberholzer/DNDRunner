@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import createMulitReducer from './createMultiReducer';
 import createSingleReducer from './createSingleReducer';
 import mode from './mode';
+import order from './order';
 
 export const runnerApp = combineReducers({
     campaigns: createMulitReducer('campaign'),
@@ -17,5 +18,6 @@ export const runnerApp = combineReducers({
     delete: createSingleReducer('delete'),
     edit: createSingleReducer('edit'),
     allItems: createMulitReducer('all_item'),
-    mode
+    mode,
+    order
 });

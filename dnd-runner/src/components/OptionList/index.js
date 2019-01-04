@@ -7,6 +7,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
 import AddDialog from '../AddDialog';
+import BattleScreen from '../BattleScreen';
 import Notification from '../Notification';
 import genericAction from '../../actions';
 import apiCall from '../../api';
@@ -90,13 +91,14 @@ class OptionList extends Component {
                 <Typography style={{ margin: '20px' }} variant="h5">
                     Game Options
                 </Typography>
-                <Card>
+                <Card style={{ marginBottom: 10 }}>
                     <List>
                         <ListItem button onClick={this.handleOpen}>
                             <ListItemText primary="Give Player Item" />
                         </ListItem>
                     </List>
                 </Card>
+                {!isEmpty(this.props.enemies) && <BattleScreen />}
                 <Notification
                     open={this.state.openNotification}
                     message={this.state.notification}
@@ -108,7 +110,8 @@ class OptionList extends Component {
 }
 
 const mapStateToProps = state => ({
-    players: state.players
+    players: state.players,
+    enemies: state.enemies
 });
 
 const mapDispatchToProps = dispatch => ({

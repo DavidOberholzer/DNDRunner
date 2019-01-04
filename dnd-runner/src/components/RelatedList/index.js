@@ -45,7 +45,6 @@ class RelatedList extends Component {
         amount--;
         let { parentName, resource } = this.props;
         parentName = parentName.toLowerCase();
-        const resourceName = resource.toUpperCase();
         let newValue = {};
 
         if (amount === 0) {
@@ -73,10 +72,6 @@ class RelatedList extends Component {
         this.props.setEdit({
             ...this.props.edit,
             data: newValue
-        });
-        this.setState({
-            openNotification: true,
-            notification: `Deleted '${resourceName}'`
         });
     };
 

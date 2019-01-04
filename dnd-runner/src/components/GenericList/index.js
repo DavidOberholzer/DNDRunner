@@ -98,7 +98,9 @@ class GenericList extends Component {
                 ) : (
                     <BattleList handleDelete={this.handleDelete} fields={this.props.fields} />
                 )}
-                <AddBox resource={this.props.resourceName} onClick={this.handleOpen} />
+                {this.props.mode !== 'turn-order' && this.props.mode !== 'combat' && (
+                    <AddBox resource={this.props.resourceName} onClick={this.handleOpen} />
+                )}
                 <Notification
                     open={this.state.openNotification}
                     message={this.state.notification}
@@ -114,7 +116,8 @@ const mapStateToProps = state => ({
     battle: state.battle,
     battles: state.battles,
     players: state.players,
-    enemies: state.enemies
+    enemies: state.enemies,
+    mode: state.mode
 });
 
 const mapDispatchToProps = dispatch => ({

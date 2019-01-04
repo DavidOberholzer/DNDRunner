@@ -196,6 +196,7 @@ class AddDialog extends Component {
                                             value={details.value}
                                             onChange={this.handleChange}
                                             style={{ margin: '10px', width: '100%' }}
+                                            multiline
                                         />
                                     );
                                 }

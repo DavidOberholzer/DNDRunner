@@ -37,16 +37,18 @@ class CharacterList extends Component {
         return (
             <React.Fragment>
                 <Typography style={{ margin: this.props.back ? '15.5px' : '20px' }} variant="h5">
-                    {this.props.back && (
-                        <Fab
-                            onClick={this.props.back}
-                            size="small"
-                            color="primary"
-                            style={{ marginRight: 10 }}
-                        >
-                            <BackIcon />
-                        </Fab>
-                    )}
+                    {this.props.back &&
+                        this.props.mode !== 'turn-order' &&
+                        this.props.mode !== 'combat' && (
+                            <Fab
+                                onClick={this.props.back}
+                                size="small"
+                                color="primary"
+                                style={{ marginRight: 10 }}
+                            >
+                                <BackIcon />
+                            </Fab>
+                        )}
                     {title}
                 </Typography>
 
@@ -104,7 +106,9 @@ class CharacterList extends Component {
     }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    mode: state.mode
+});
 
 const mapDispatchToProps = dispatch => ({
     setEdit: data => dispatch(genericAction('SET', 'EDIT', data))
