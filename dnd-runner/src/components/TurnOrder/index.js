@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import DiceIcon from '@material-ui/icons/Casino';
 
 import { setMode } from '../../actions/mode';
-import { setOrder, stepForwardOrder, stepBackwardOrder } from '../../actions/order';
+import { setOrder } from '../../actions/order';
 import { titleCase } from '../../utils';
 
 class TurnOrder extends Component {
@@ -24,7 +24,7 @@ class TurnOrder extends Component {
 
     initializeState = resource => ({
         ...Object.values(this.props[resource]).reduce((accumulator, value) => {
-            accumulator[value.name] = 0;
+            accumulator[value.name] = '';
             return accumulator;
         }, {})
     });
@@ -40,24 +40,33 @@ class TurnOrder extends Component {
 
     submitInitiative = () => {
         let totalList = [];
+        let error = null;
         ['players', 'enemies'].map(resource => {
             Object.entries(this.state[resource]).map(([key, value]) => {
-                totalList.push({ name: key, value });
+                if (value === '') {
+                    error = 'All players must have an initiative value.';
+                }
+                totalList.push({ name: key, value, resource });
                 return null;
             });
             return null;
         });
-        for (let i = 0; i < totalList.length; i++) {
-            for (let j = i + 1; j < totalList.length; j++) {
-                if (totalList[i].value > totalList[j].value) {
-                    let temp = totalList[i];
-                    totalList[i] = totalList[j];
-                    totalList[j] = temp;
+
+        if (!error) {
+            for (let i = 0; i < totalList.length; i++) {
+                for (let j = i + 1; j < totalList.length; j++) {
+                    if (parseInt(totalList[i].value, 10) < parseInt(totalList[j].value, 10)) {
+                        let temp = totalList[i];
+                        totalList[i] = totalList[j];
+                        totalList[j] = temp;
+                    }
                 }
             }
+            this.props.setOrderList(totalList);
+            this.props.setMode('combat');
+        } else {
+            this.setState({ error });
         }
-        this.props.setOrderList(totalList);
-        this.props.setMode('combat');
     };
 
     render() {
@@ -90,9 +99,19 @@ class TurnOrder extends Component {
                             </React.Fragment>
                         ))}
                     </form>
+                    {this.state.error && (
+                        <Typography color="secondary" variant="subtitle1">
+                            {this.state.error}
+                        </Typography>
+                    )}
                 </CardContent>
                 <CardActions>
-                    <Button variant="contained" size="small" onClick={this.submitInitiative}>
+                    <Button
+                        variant="contained"
+                        size="small"
+                        onClick={this.submitInitiative}
+                        style={{ margin: '10px', width: '100%' }}
+                    >
                         Start Turn Order
                     </Button>
                 </CardActions>
@@ -108,9 +127,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     setMode: mode => dispatch(setMode(mode)),
-    setOrderList: order => dispatch(setOrder(order)),
-    stepOrderListForward: () => dispatch(stepForwardOrder()),
-    stepOrderListBackward: () => dispatch(stepBackwardOrder())
+    setOrderList: order => dispatch(setOrder(order))
 });
 
 export default connect(

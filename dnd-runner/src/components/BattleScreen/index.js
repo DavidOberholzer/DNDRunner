@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Card from '@material-ui/core/Card';
 import Button from '@material-ui/core/Button';
 
+import CombatScreen from '../CombatScreen';
 import TurnOrder from '../TurnOrder';
 import { setMode } from '../../actions/mode';
 import { clearOrder } from '../../actions/order';
@@ -34,7 +35,7 @@ class BattleScreen extends Component {
                     ) : mode === 'turn-order' ? (
                         <TurnOrder />
                     ) : (
-                        mode === 'combat' && <div />
+                        mode === 'combat' && <CombatScreen />
                     )}
                 </Card>
                 {(mode === 'turn-order' || mode === 'combat') && (

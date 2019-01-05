@@ -15,13 +15,7 @@ class App extends Component {
         const nightTime = hour > 17 || hour < 7;
         const theme = createMuiTheme({
             palette: {
-                type: nightTime ? 'dark' : 'light',
-                primary: {
-                    main: '#880e4f'
-                },
-                secondary: {
-                    main: '#ff5722'
-                }
+                type: nightTime ? 'dark' : 'light'
             },
             typography: {
                 useNextVariants: true
