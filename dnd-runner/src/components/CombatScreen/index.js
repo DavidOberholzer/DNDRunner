@@ -15,9 +15,11 @@ import apiCall from '../../api';
 import genericAction from '../../actions';
 
 class CombatScreen extends Component {
-    handleStepForward = () => {
-        this.props.stepOrderListForward();
-        if (this.props.order[1] === this.props.start) {
+    handleStep = direction => () => {
+        direction === 'forward'
+            ? this.props.stepOrderListForward()
+            : this.props.stepOrderListBackward();
+        if (this.props.order[direction === 'forward' ? 1 : 0] === this.props.start) {
             let { time_of_day, day } = this.props.campaign;
             let date = new Date(
                 0,
@@ -27,26 +29,7 @@ class CombatScreen extends Component {
                 time_of_day.slice(3, 5),
                 time_of_day.slice(6, 8)
             );
-            date.setSeconds(date.getSeconds() + 6);
-            time_of_day = date.toLocaleTimeString();
-            day += date.getDay();
-            this.updateCampaign(time_of_day, day);
-        }
-    };
-
-    handleStepBackward = () => {
-        this.props.stepOrderListBackward();
-        if (this.props.order[0] === this.props.start) {
-            let { time_of_day, day } = this.props.campaign;
-            let date = new Date(
-                0,
-                0,
-                0,
-                time_of_day.slice(0, 2),
-                time_of_day.slice(3, 5),
-                time_of_day.slice(6, 8)
-            );
-            date.setSeconds(date.getSeconds() - 6);
+            date.setSeconds(date.getSeconds() + (direction === 'forward' ? 6 : -6));
             time_of_day = date.toLocaleTimeString();
             day += date.getDay();
             this.updateCampaign(time_of_day, day);
@@ -103,7 +86,7 @@ class CombatScreen extends Component {
                     <Button
                         variant="contained"
                         size="small"
-                        onClick={this.handleStepForward}
+                        onClick={this.handleStep('forward')}
                         style={{ margin: '10px', width: '100%' }}
                     >
                         Next Turn
@@ -111,7 +94,7 @@ class CombatScreen extends Component {
                     <Button
                         variant="contained"
                         size="small"
-                        onClick={this.handleStepBackward}
+                        onClick={this.handleStep('backward')}
                         style={{ margin: '10px', width: '100%' }}
                     >
                         Previous Turn
@@ -129,7 +112,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    setCampaign: campaign => dispatch(genericAction('SET', 'CAMPAIGN', campaign)),
+    setCampaign: campaign => {
+        dispatch(genericAction('SET', 'CAMPAIGN', campaign));
+        dispatch(genericAction('ADD', 'CAMPAIGN', campaign));
+    },
     stepOrderListForward: () => dispatch(stepForwardOrder()),
     stepOrderListBackward: () => dispatch(stepBackwardOrder())
 });

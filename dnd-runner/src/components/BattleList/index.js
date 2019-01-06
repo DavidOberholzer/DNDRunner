@@ -70,14 +70,16 @@ class BattleList extends Component {
                                     <EditIcon />
                                     Edit
                                 </Button>
-                                <Button
-                                    variant="contained"
-                                    color="secondary"
-                                    onClick={this.props.handleDelete(battle.id)}
-                                >
-                                    <DeleteIcon />
-                                    Delete
-                                </Button>
+                                {this.props.mode !== 'combat' && this.props.mode !== 'turn-order' && (
+                                    <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        onClick={this.props.handleDelete(battle.id)}
+                                    >
+                                        <DeleteIcon />
+                                        Delete
+                                    </Button>
+                                )}
                             </CardActions>
                         </Card>
                     ))}
@@ -87,7 +89,8 @@ class BattleList extends Component {
 }
 
 const mapStateToProps = state => ({
-    battles: state.battles
+    battles: state.battles,
+    mode: state.mode
 });
 
 const mapDispatchToProps = dispatch => ({

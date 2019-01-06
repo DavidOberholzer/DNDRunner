@@ -26,6 +26,9 @@ class Player(DB.Model):
     __tablename__ = "Player"
     id = DB.Column(DB.Integer, primary_key=True)
     name = DB.Column(DB.VARCHAR(30), unique=True, index=True, nullable=False)
+    experience = DB.Column(DB.Integer, default=0, nullable=False)
+    level = DB.Column(DB.Integer, default=1, nullable=False)
+    avatar = DB.Column(DB.VARCHAR(50), nullable=True)
     health = DB.Column(DB.Integer, nullable=False)
     current_health = DB.Column(DB.Integer, nullable=False)
     carry_capacity = DB.Column(DB.Float, nullable=False)
@@ -63,6 +66,8 @@ class Enemy(DB.Model):
     __tablename__ = "Enemy"
     id = DB.Column(DB.Integer, primary_key=True)
     name = DB.Column(DB.VARCHAR(30), unique=True, index=True, nullable=False)
+    level = DB.Column(DB.Integer, default=1, nullable=False)
+    avatar = DB.Column(DB.VARCHAR(50), nullable=True)
     health = DB.Column(DB.Integer, nullable=True)
     current_health = DB.Column(DB.Integer, nullable=True)
     alive = DB.Column(DB.Boolean, default=True)

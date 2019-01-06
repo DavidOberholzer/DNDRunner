@@ -90,13 +90,16 @@ class CharacterList extends Component {
                                         <EditIcon />
                                         Edit
                                     </Button>
-                                    <Button
-                                        variant="contained"
-                                        color="secondary"
-                                        onClick={this.props.handleDelete(character.id)}
-                                    >
-                                        <DeleteIcon /> Delete
-                                    </Button>
+                                    {this.props.mode !== 'combat' &&
+                                        this.props.mode !== 'turn-order' && (
+                                            <Button
+                                                variant="contained"
+                                                color="secondary"
+                                                onClick={this.props.handleDelete(character.id)}
+                                            >
+                                                <DeleteIcon /> Delete
+                                            </Button>
+                                        )}
                                 </CardActions>
                             </Card>
                         );

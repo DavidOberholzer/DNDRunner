@@ -16,7 +16,7 @@ export const pluralToSingular = word => {
 };
 
 export const singularToPlural = word => {
-    if (word.slice(-1) === 'y') {
+    if (word.slice(-1).toLowerCase() === 'y') {
         word = `${word.slice(0, -1)}ie`;
     }
     return word + 's';

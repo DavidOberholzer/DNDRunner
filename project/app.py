@@ -7,6 +7,7 @@ from project import settings
 App = Flask(__name__)
 CORS(App)
 
+App.config["UPLOAD_FOLDER"] = settings.UPLOAD_FOLDER
 App.config["SQLALCHEMY_DATABASE_URI"] = settings.SQLALCHEMY_DATABASE_URI
 App.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = settings.SQLALCHEMY_TRACK_MODIFICATIONS
 

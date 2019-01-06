@@ -2,8 +2,8 @@ export const RESOURCE_FIELDS = {
     campaign: [
         { name: 'name', type: 'text', label: 'Name', value: '' },
         { name: 'description', type: 'text', label: 'Description', value: '' },
-        { name: 'day', type: 'number', label: 'Day', value: 1},
-        { name: 'time_of_day', type: 'time', label: 'Time of Day', value: '07:30'}
+        { name: 'day', type: 'number', label: 'Day', value: 1 },
+        { name: 'time_of_day', type: 'time', label: 'Time of Day', value: '07:30' }
     ],
     player: [
         { name: 'name', type: 'text', label: 'Name', value: '' },
@@ -18,6 +18,18 @@ export const RESOURCE_FIELDS = {
             name: 'carry_capacity',
             type: 'number',
             label: 'Carry Capacity',
+            value: 0
+        },
+        {
+            name: 'level',
+            type: 'number',
+            label: 'Level',
+            value: 1
+        },
+        {
+            name: 'experience',
+            type: 'number',
+            label: 'Experience',
             value: 0
         },
         {
@@ -44,6 +56,12 @@ export const RESOURCE_FIELDS = {
             type: 'number',
             label: 'Current Health',
             value: 0
+        },
+        {
+            name: 'level',
+            type: 'number',
+            label: 'Level',
+            value: 1
         },
         {
             name: 'alive',

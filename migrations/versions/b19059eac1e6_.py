@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 67e0e31ee7a0
+Revision ID: b19059eac1e6
 Revises: 
-Create Date: 2019-01-04 13:44:24.368223
+Create Date: 2019-01-06 16:57:07.232506
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '67e0e31ee7a0'
+revision = 'b19059eac1e6'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -41,6 +41,8 @@ def upgrade():
     op.create_table('Enemy',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.VARCHAR(length=30), nullable=False),
+    sa.Column('level', sa.Integer(), nullable=False),
+    sa.Column('avatar', sa.VARCHAR(length=50), nullable=True),
     sa.Column('health', sa.Integer(), nullable=True),
     sa.Column('current_health', sa.Integer(), nullable=True),
     sa.Column('alive', sa.Boolean(), nullable=True),
@@ -61,6 +63,9 @@ def upgrade():
     op.create_table('Player',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.VARCHAR(length=30), nullable=False),
+    sa.Column('experience', sa.Integer(), nullable=False),
+    sa.Column('level', sa.Integer(), nullable=False),
+    sa.Column('avatar', sa.VARCHAR(length=50), nullable=True),
     sa.Column('health', sa.Integer(), nullable=False),
     sa.Column('current_health', sa.Integer(), nullable=False),
     sa.Column('carry_capacity', sa.Float(), nullable=False),

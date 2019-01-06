@@ -17,6 +17,7 @@ import genericAction from '../../actions';
 class ManageSelect extends Component {
     handleSelect = page => () => {
         this.props.setManage(page);
+        this.props.clearCampaign();
     };
 
     render() {
@@ -67,6 +68,7 @@ class ManageSelect extends Component {
 const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => ({
+    clearCampaign: () => dispatch(genericAction('CLEAR', 'CAMPAIGN', {})),
     setManage: value => dispatch(genericAction('SET', 'MANAGE', value))
 });
 

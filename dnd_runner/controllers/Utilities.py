@@ -1,6 +1,10 @@
-from flask import Blueprint, jsonify
+import os
+
+from flask import Blueprint, flash, jsonify, request
+from werkzeug.utils import secure_filename
 
 from dnd_runner import db_actions, models
+from project import settings
 
 utility_methods = Blueprint("utility", __name__)
 
@@ -86,6 +90,34 @@ def enemies_in_battle(_id: int) -> tuple:
             }
         )
     return jsonify(enemies), status
+
+
+@utility_methods.route("/upload-image", methods=["POST"])
+def upload_file():
+    status = 500
+    response = {}
+    if "file" not in request.files:
+        flash("No file part")
+        status = 400
+        response = {"message": "No file part"}
+    file = request.files["file"]
+    # if user does not select file, browser also
+    # submit an empty part without filename
+    if file.filename == '':
+        flash("No selected file")
+        status = 400
+        response = {"message": "No selected file"}
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(settings.UPLOAD_FOLDER, filename))
+        status = 200
+        response = {"message": "File Uploaded"}
+    return jsonify(response), status
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in settings.ALLOWED_EXTENSIONS
 
 
 def fill_items(player: dict) -> dict:

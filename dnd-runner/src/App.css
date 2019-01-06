@@ -37,6 +37,14 @@
     height: 100%;
 }
 
+.Rom-Form {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
 .Card-Actions-Right {
     display: flex;
     flex-direction: row;

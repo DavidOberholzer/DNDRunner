@@ -13,6 +13,7 @@ import genericAction from '../../actions';
 import apiCall from '../../api';
 import { RESOURCE_FIELDS } from '../../constants';
 import { isEmpty } from '../../utils';
+import TimeManager from '../TimeManager';
 
 class OptionList extends Component {
     state = {
@@ -98,6 +99,9 @@ class OptionList extends Component {
                         </ListItem>
                     </List>
                 </Card>
+                {this.props.mode !== 'combat' && this.props.mode !== 'turn-order' && (
+                    <TimeManager />
+                )}
                 {!isEmpty(this.props.enemies) && <BattleScreen />}
                 <Notification
                     open={this.state.openNotification}
@@ -111,7 +115,8 @@ class OptionList extends Component {
 
 const mapStateToProps = state => ({
     players: state.players,
-    enemies: state.enemies
+    enemies: state.enemies,
+    mode: state.mode
 });
 
 const mapDispatchToProps = dispatch => ({
