@@ -55,9 +55,14 @@ class DBActions:
 
     @staticmethod
     def delete(model: DB.Model, **kwargs) -> dict:
-        instance = model.query.filter_by(**kwargs["query"]).first_or_404()
-        DB.session.delete(instance)
-        DB.session.commit()
+        query = model.query.filter_by(**kwargs["query"])
+        if (kwargs["params"] or {}).get("error", True):
+            instance = query.first_or_404()
+        else:
+            instance = query.first()
+        if instance:
+            DB.session.delete(instance)
+            DB.session.commit()
         return {"success": True}
 
 

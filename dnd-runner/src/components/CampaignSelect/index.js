@@ -20,6 +20,7 @@ class CampaignSelect extends Component {
     };
 
     handleSelect = id => () => {
+        this.props.clearManage();
         this.props.setCampaignMode();
         this.props.setCampaign(this.props.campaigns[id]);
         Promise.all([
@@ -69,6 +70,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+    clearManage: () => dispatch(genericAction('CLEAR', 'MANAGE', {})),
     setCampaignMode: () => dispatch(setMode('campaign')),
     setCampaigns: campaigns => dispatch(genericAction('SET_MANY', 'CAMPAIGN', campaigns)),
     setCampaign: campaign => dispatch(genericAction('SET', 'CAMPAIGN', campaign)),

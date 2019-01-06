@@ -12,6 +12,8 @@ import { setMode } from '../../actions/mode';
 import apiCall from '../../api';
 import { RESOURCE_FIELDS } from '../../constants';
 import { isEmpty, pluralToSingular, singularToPlural } from '../../utils';
+import ManageScreen from '../ManageScreen';
+import RemoveDialog from '../RemoveDialog';
 
 export class CampaignScreen extends Component {
     state = {
@@ -85,8 +87,11 @@ export class CampaignScreen extends Component {
             parent: isCampaignMode ? null : this.props.battle
         };
 
-        return !isEmpty(this.props.campaign) ? (
+        return this.props.manage ? (
+            <ManageScreen />
+        ) : !isEmpty(this.props.campaign) ? (
             <Card className="Row-Display">
+                <RemoveDialog />
                 {!isEmpty(this.props.edit) && (
                     <EditDialog
                         open={!isEmpty(this.props.edit)}
@@ -124,7 +129,8 @@ const mapStateToProps = state => ({
     battle: state.battle,
     enemies: state.enemies,
     mode: state.mode,
-    edit: state.edit
+    edit: state.edit,
+    manage: state.manage
 });
 
 const mapDispatchToProps = dispatch => ({

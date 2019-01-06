@@ -59,6 +59,16 @@ def update_item(_id: int) -> tuple:
 
 @item_methods.route("/items/<_id>", methods=["DELETE"])
 def delete_item(_id: int) -> tuple:
+    db_actions.crud(
+        action="delete",
+        model=models.PlayerItem,
+        query={
+            "item_id": _id,
+        },
+        params={
+            "error": False
+        }
+    )
     result, status = db_actions.crud(
         action="delete",
         model=models.Item,

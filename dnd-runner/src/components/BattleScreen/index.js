@@ -27,7 +27,6 @@ class BattleScreen extends Component {
                         <Button
                             style={{ width: '100%' }}
                             variant="contained"
-                            color="primary"
                             onClick={this.handleRun}
                         >
                             Run Battle!
@@ -43,7 +42,6 @@ class BattleScreen extends Component {
                         <Button
                             style={{ width: '100%' }}
                             variant="contained"
-                            color="primary"
                             onClick={this.handleStop}
                         >
                             Stop Battle

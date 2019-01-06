@@ -12,8 +12,8 @@ import TimeIcon from '@material-ui/icons/AccessTimeRounded';
 
 import AddDialog from '../AddDialog';
 import CampaignSelect from '../CampaignSelect';
+import ManageSelect from '../ManageSelect';
 import Notification from '../Notification';
-import WarningDialog from '../WarningDialog';
 
 import genericAction from '../../actions';
 import apiCall from '../../api';
@@ -71,7 +71,6 @@ class NavBar extends Component {
     render() {
         return (
             <div>
-                <WarningDialog />
                 <AddDialog
                     title="Add a New Campaign"
                     open={this.state.open}
@@ -87,6 +86,7 @@ class NavBar extends Component {
                         onKeyDown={this.toggleDrawer(false)}
                     >
                         <CampaignSelect />
+                        <ManageSelect />
                     </div>
                 </Drawer>
                 <AppBar position="static">

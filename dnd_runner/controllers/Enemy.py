@@ -59,6 +59,16 @@ def update_enemy(_id: int) -> tuple:
 
 @enemy_methods.route("/enemies/<_id>", methods=["DELETE"])
 def delete_enemy(_id: int) -> tuple:
+    db_actions.crud(
+        action="delete",
+        model=models.BattleEnemy,
+        query={
+            "enemy_id": _id,
+        },
+        params={
+            "error": False
+        }
+    )
     result, status = db_actions.crud(
         action="delete",
         model=models.Enemy,

@@ -59,6 +59,26 @@ def update_battles(_id: int) -> tuple:
 
 @battle_methods.route("/battles/<_id>", methods=["DELETE"])
 def delete_battles(_id: int) -> dict:
+    db_actions.crud(
+        action="delete",
+        model=models.BattleEnemy,
+        query={
+            "battle_id": _id
+        },
+        params={
+            "error": False
+        }
+    )
+    db_actions.crud(
+        action="delete",
+        model=models.CampaignBattle,
+        query={
+            "battle_id": _id
+        },
+        params={
+            "error": False
+        }
+    )
     result, status = db_actions.crud(
         action="delete",
         model=models.Battle,

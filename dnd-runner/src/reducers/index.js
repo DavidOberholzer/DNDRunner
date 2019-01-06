@@ -7,17 +7,18 @@ import order from './order';
 
 export const runnerApp = combineReducers({
     campaigns: createMulitReducer('campaign'),
-    campaign: createSingleReducer('campaign'),
+    campaign: createSingleReducer('campaign', {}),
     players: createMulitReducer('player'),
     allPlayers: createMulitReducer('all_player'),
     battles: createMulitReducer('battle'),
     allBattles: createMulitReducer('all_battle'),
-    battle: createSingleReducer('battle'),
+    battle: createSingleReducer('battle', {}),
     enemies: createMulitReducer('enemy'),
     allEnemies: createMulitReducer('all_enemy'),
-    delete: createSingleReducer('delete'),
-    edit: createSingleReducer('edit'),
+    delete: createSingleReducer('delete', {}),
+    edit: createSingleReducer('edit', {}),
     allItems: createMulitReducer('all_item'),
+    manage: createSingleReducer('manage', null),
     mode,
     order
 });

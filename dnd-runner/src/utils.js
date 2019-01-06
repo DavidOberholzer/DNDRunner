@@ -9,7 +9,7 @@ export const titleCase = string =>
 
 export const pluralToSingular = word => {
     word = word.slice(0, -1);
-    if (word.slice(-2) === 'ie') {
+    if (word.slice(-2).toLowerCase() === 'ie') {
         word = `${word.slice(0, -2)}y`;
     }
     return word;
