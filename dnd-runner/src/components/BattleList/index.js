@@ -52,6 +52,9 @@ class BattleList extends Component {
                                 <Typography variant="subtitle1" component="h3">
                                     {battle.description}
                                 </Typography>
+                                <Typography variant="subtitle1" component="h3">
+                                    XP Reward: {battle.experience}
+                                </Typography>
                             </CardContent>
                             <CardActions style={{ marginBottom: '10px' }}>
                                 <Button

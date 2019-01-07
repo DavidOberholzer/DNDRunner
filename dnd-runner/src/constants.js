@@ -1,36 +1,40 @@
 export const RESOURCE_FIELDS = {
     campaign: [
-        { name: 'name', type: 'text', label: 'Name', value: '' },
+        { name: 'name', type: 'text', label: 'Name', value: '', required: true },
         { name: 'description', type: 'text', label: 'Description', value: '' },
-        { name: 'day', type: 'number', label: 'Day', value: 1 },
-        { name: 'time_of_day', type: 'time', label: 'Time of Day', value: '07:30' }
+        { name: 'day', type: 'number', label: 'Day', value: 1, required: true },
+        { name: 'time_of_day', type: 'time', label: 'Time of Day', value: '07:30', required: true }
     ],
     player: [
-        { name: 'name', type: 'text', label: 'Name', value: '' },
-        { name: 'health', type: 'number', label: 'Health', value: 0 },
+        { name: 'name', type: 'text', label: 'Name', value: '', required: true },
+        { name: 'health', type: 'number', label: 'Health', value: 0, required: true },
         {
             name: 'current_health',
             type: 'number',
             label: 'Current Health',
-            value: 0
+            value: 0,
+            required: true
         },
         {
             name: 'carry_capacity',
             type: 'number',
             label: 'Carry Capacity',
-            value: 0
+            value: 0,
+            required: true
         },
         {
             name: 'level',
             type: 'number',
             label: 'Level',
-            value: 1
+            value: 1,
+            required: true
         },
         {
             name: 'experience',
             type: 'number',
             label: 'Experience',
-            value: 0
+            value: 0,
+            required: true
         },
         {
             name: 'avatar',
@@ -46,28 +50,36 @@ export const RESOURCE_FIELDS = {
         }
     ],
     battle: [
-        { name: 'name', type: 'text', label: 'Name', value: '' },
+        { name: 'name', type: 'text', label: 'Name', value: '', required: true },
         {
             name: 'description',
             type: 'text',
             label: 'Description',
             value: ''
+        },
+        {
+            name: 'experience',
+            type: 'number',
+            label: 'XP Reward',
+            value: 0
         }
     ],
     enemy: [
-        { name: 'name', type: 'text', label: 'Name', value: '' },
-        { name: 'health', type: 'number', label: 'Health', value: 0 },
+        { name: 'name', type: 'text', label: 'Name', value: '', required: true },
+        { name: 'health', type: 'number', label: 'Health', value: 0, required: true },
         {
             name: 'current_health',
             type: 'number',
             label: 'Current Health',
-            value: 0
+            value: 0,
+            required: true
         },
         {
             name: 'level',
             type: 'number',
             label: 'Level',
-            value: 1
+            value: 1,
+            required: true
         },
         {
             name: 'avatar',
@@ -89,19 +101,22 @@ export const RESOURCE_FIELDS = {
             label: 'Player',
             value: '',
             values: 'Players',
-            global: true
+            global: true,
+            required: true
         },
         {
             name: 'name',
             type: 'text',
             label: 'Name',
-            value: ''
+            value: '',
+            required: true
         },
         {
             name: 'weight',
             type: 'number',
             label: 'Weight',
-            value: 0
+            value: 0,
+            required: true
         }
     ]
 };

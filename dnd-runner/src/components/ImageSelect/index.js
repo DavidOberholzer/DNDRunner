@@ -8,17 +8,19 @@ import Select from '@material-ui/core/Select';
 
 class ImageSelect extends Component {
     render() {
-        const { details, handleChange } = this.props;
+        const { details, error, handleChange } = this.props;
         return (
             <FormControl style={{ margin: '10px' }}>
                 <InputLabel htmlFor={details.name}>{details.label}</InputLabel>
                 <Select
+                    error={error}
                     value={details.value}
                     onChange={handleChange}
                     inputProps={{
                         name: details.name,
                         id: details.name
                     }}
+                    required={details.required}
                 >
                     <MenuItem value="">
                         <em>None</em>

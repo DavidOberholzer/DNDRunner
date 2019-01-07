@@ -17,7 +17,7 @@ import Typography from '@material-ui/core/Typography';
 import Switch from '@material-ui/core/Switch';
 
 import ImageSelect from '../ImageSelect';
-import { isEmpty, titleCase } from '../../utils';
+import { isEmpty, pluralToSingular, titleCase } from '../../utils';
 
 class AddDialog extends Component {
     constructor(props) {
@@ -25,7 +25,8 @@ class AddDialog extends Component {
         this.state = {
             fields: this.initializeState(),
             existing: '',
-            checkedExisting: true
+            checkedExisting: true,
+            errors: new Set([])
         };
     }
 
@@ -60,12 +61,13 @@ class AddDialog extends Component {
     };
 
     handleSwitch = () => {
-        this.setState({ checkedExisting: !this.state.checkedExisting });
+        this.setState({ checkedExisting: !this.state.checkedExisting, errors: new Set([]) });
     };
 
     handleClose = add => () => {
         let data = {};
         let newOne = false;
+        const errors = new Set([]);
         if (
             this.state.checkedExisting &&
             this.props.existing &&
@@ -74,6 +76,12 @@ class AddDialog extends Component {
             if (this.state.existing) {
                 data = Object.entries(this.state.fields).reduce((accumulator, [name, details]) => {
                     if (details.global) {
+                        if (
+                            details.required &&
+                            (details.type === 'number' ? isNaN(details.value) : !details.value)
+                        ) {
+                            errors.add(name);
+                        }
                         accumulator[name] = details.value;
                     }
                     return accumulator;
@@ -82,11 +90,21 @@ class AddDialog extends Component {
                     ...this.props.storeValues(this.resourceName)[this.state.existing],
                     ...data
                 };
+            } else {
+                if (add) {
+                    errors.add(pluralToSingular(this.props.existing));
+                }
             }
         } else {
             data =
                 add &&
                 Object.entries(this.state.fields).reduce((accumulator, [name, details]) => {
+                    if (
+                        details.required &&
+                        (details.type === 'number' ? isNaN(details.value) : !details.value)
+                    ) {
+                        errors.add(name);
+                    }
                     if (details.value) {
                         accumulator[name] = details.value;
                     }
@@ -94,12 +112,18 @@ class AddDialog extends Component {
                 }, {});
             newOne = true;
         }
-        this.setState({
-            fields: this.initializeState(),
-            existing: '',
-            checkedExisting: true
-        });
-        this.props.existing ? this.props.handleClose(data, newOne) : this.props.handleClose(data);
+        if (errors.size === 0) {
+            this.setState({
+                fields: this.initializeState(),
+                existing: '',
+                checkedExisting: true
+            });
+            this.props.existing
+                ? this.props.handleClose(data, newOne)
+                : this.props.handleClose(data);
+        } else {
+            this.setState({ errors });
+        }
     };
 
     render() {
@@ -188,15 +212,19 @@ class AddDialog extends Component {
                                             key={name}
                                             details={details}
                                             handleChange={this.handleChange}
+                                            error={this.state.errors.has(name)}
+                                            required={details.required}
                                         />
                                     ) : (
                                         <TextField
                                             key={name}
                                             id={name}
+                                            error={this.state.errors.has(name)}
                                             label={details.label}
                                             type={details.type}
                                             value={details.value}
                                             onChange={this.handleChange}
+                                            required={details.required}
                                             style={{ margin: '10px' }}
                                             multiline
                                         />
@@ -214,6 +242,11 @@ class AddDialog extends Component {
                             />
                             <Typography>New/Existing</Typography>
                         </div>
+                    )}
+                    {this.state.errors.size !== 0 && (
+                        <DialogContentText>
+                            Fields '{Array.from(this.state.errors).join(', ')}' are Required!
+                        </DialogContentText>
                     )}
                     {this.props.error && <DialogContentText>{this.props.error}</DialogContentText>}
                 </DialogContent>

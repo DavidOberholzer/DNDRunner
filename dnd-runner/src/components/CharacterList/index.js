@@ -68,7 +68,7 @@ class CharacterList extends Component {
                                             }`}
                                         />
                                     }
-                                    title={character.name}
+                                    title={`${character.name} - Level ${character.level}`}
                                     subheader={
                                         !character.alive ? 'Dead' : dying ? 'Dying' : 'Alive'
                                     }
@@ -85,6 +85,11 @@ class CharacterList extends Component {
                                         >
                                             Carrying Weight: {weight} / {character.carry_capacity}
                                             {encumbered && ` - Encumbered`}
+                                        </Typography>
+                                    )}
+                                    {character.experience !== undefined && (
+                                        <Typography variant="subtitle1" component="h3">
+                                            XP: {character.experience}
                                         </Typography>
                                     )}
                                 </CardContent>

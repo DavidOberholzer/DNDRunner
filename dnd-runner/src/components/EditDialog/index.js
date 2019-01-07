@@ -17,7 +17,8 @@ export class EditDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            fields: this.initializeState()
+            fields: this.initializeState(),
+            errors: new Set([])
         };
     }
 
@@ -49,16 +50,27 @@ export class EditDialog extends Component {
     };
 
     handleClose = add => () => {
+        const errors = new Set([]);
         const data =
             add &&
             Object.entries(this.state.fields).reduce((accumulator, [name, details]) => {
+                if (
+                    details.required &&
+                    (details.type === 'number' ? isNaN(details.value) : !details.value)
+                ) {
+                    errors.add(name);
+                }
                 accumulator[name] = details.value;
                 return accumulator;
             }, {});
-        this.setState({
-            fields: this.initializeState()
-        });
-        this.props.handleUpdate(this.props.data.id, data);
+        if (errors.size === 0) {
+            this.setState({
+                fields: this.initializeState()
+            });
+            this.props.handleUpdate(this.props.data.id, data);
+        } else {
+            this.setState({ errors });
+        }
     };
 
     render() {
@@ -89,15 +101,19 @@ export class EditDialog extends Component {
                                     key={name}
                                     details={details}
                                     handleChange={this.handleChange}
+                                    error={this.state.errors.has(name)}
+                                    required={details.required}
                                 />
                             ) : (
                                 <TextField
                                     key={name}
                                     id={name}
+                                    error={this.state.errors.has(name)}
                                     label={details.label}
                                     type={details.type}
                                     value={details.value}
                                     onChange={this.handleChange}
+                                    required={details.required}
                                     style={{ margin: '10px' }}
                                     multiline
                                 />
@@ -117,7 +133,11 @@ export class EditDialog extends Component {
                         }
                         return null;
                     })}
-
+                    {this.state.errors.size !== 0 && (
+                        <DialogContentText>
+                            Fields '{Array.from(this.state.errors).join(', ')}' are Required!
+                        </DialogContentText>
+                    )}
                     {error && <DialogContentText>{error}</DialogContentText>}
                 </DialogContent>
                 <DialogActions>

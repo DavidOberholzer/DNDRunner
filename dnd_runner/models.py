@@ -88,6 +88,7 @@ class Battle(DB.Model):
     id = DB.Column(DB.Integer, primary_key=True)
     name = DB.Column(DB.VARCHAR(30), unique=True, index=True, nullable=False)
     description = DB.Column(DB.Text, nullable=True)
+    experience = DB.Column(DB.Integer, default=0, nullable=True)
     created_at = DB.Column(DB.DateTime, default=datetime.utcnow(), nullable=False)
     updated_at = DB.Column(
         DB.DateTime,
