@@ -33,6 +33,12 @@ export const RESOURCE_FIELDS = {
             value: 0
         },
         {
+            name: 'avatar',
+            type: 'image',
+            label: 'Avatar',
+            value: ''
+        },
+        {
             name: 'alive',
             type: 'boolean',
             label: 'Alive',
@@ -62,6 +68,12 @@ export const RESOURCE_FIELDS = {
             type: 'number',
             label: 'Level',
             value: 1
+        },
+        {
+            name: 'avatar',
+            type: 'image',
+            label: 'Avatar',
+            value: ''
         },
         {
             name: 'alive',

@@ -92,26 +92,49 @@ def enemies_in_battle(_id: int) -> tuple:
     return jsonify(enemies), status
 
 
-@utility_methods.route("/upload-image", methods=["POST"])
-def upload_file():
-    status = 500
-    response = {}
+@utility_methods.route("/images", methods=["GET"])
+def get_images() -> tuple:
+    path = os.getcwd() + settings.UPLOAD_FOLDER
+    only_files = [f for f in os.listdir(path) if
+                  os.path.isfile(os.path.join(path, f))]
+    return jsonify(only_files), 200
+
+
+@utility_methods.route("/images", methods=["POST"])
+def upload_image() -> tuple:
+    status = 400
+    response = {"message": "Invalid File Type"}
     if "file" not in request.files:
         flash("No file part")
         status = 400
         response = {"message": "No file part"}
-    file = request.files["file"]
+    _file = request.files["file"]
     # if user does not select file, browser also
     # submit an empty part without filename
-    if file.filename == '':
+    if _file.filename == '':
         flash("No selected file")
         status = 400
         response = {"message": "No selected file"}
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(settings.UPLOAD_FOLDER, filename))
+    if _file and allowed_file(_file.filename):
+        filename = secure_filename(_file.filename)
+        path = os.getcwd() + settings.UPLOAD_FOLDER + "/" + filename
+        _file.save(path)
         status = 200
         response = {"message": "File Uploaded"}
+    return jsonify(response), status
+
+
+@utility_methods.route("/images/<_file>", methods=["DELETE"])
+def delete_image(_file: str):
+    path = os.getcwd() + settings.UPLOAD_FOLDER + "/" + _file
+    response = {"message": "Success"}
+    status = 200
+    if os.path.exists(path):
+        os.remove(path)
+    else:
+        response = {"message": "File Not Found"}
+        status = 404
+
     return jsonify(response), status
 
 

@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 
 import createMulitReducer from './createMultiReducer';
+import createMulitListReducer from './createMultiListReducer';
 import createSingleReducer from './createSingleReducer';
 import mode from './mode';
 import order from './order';
@@ -19,6 +20,7 @@ export const runnerApp = combineReducers({
     edit: createSingleReducer('edit', {}),
     allItems: createMulitReducer('all_item'),
     manage: createSingleReducer('manage', null),
+    images: createMulitListReducer('image'),
     mode,
     order
 });

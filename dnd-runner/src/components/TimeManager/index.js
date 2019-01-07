@@ -110,7 +110,7 @@ class TimeManager extends Component {
                         onClick={this.handleTimeUpdate(1)}
                         color="primary"
                         variant="extended"
-                        style={{ width: '50%' }}
+                        style={{ width: '50%', margin: '10px' }}
                     >
                         <AddIcon />
                         Progress Time
@@ -119,7 +119,7 @@ class TimeManager extends Component {
                         onClick={this.handleTimeUpdate(-1)}
                         color="secondary"
                         variant="extended"
-                        style={{ width: '50%' }}
+                        style={{ width: '50%', margin: '10px' }}
                     >
                         <MinusIcon />
                         Revert Time

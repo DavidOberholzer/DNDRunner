@@ -12,6 +12,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SettingsIcon from '@material-ui/icons/Settings';
 import DeleteIcon from '@material-ui/icons/DeleteForever';
 
+import ManageImages from '../ManageImages';
 import WarningDialog from '../WarningDialog';
 import genericAction from '../../actions';
 import apiCall from '../../api';
@@ -21,16 +22,20 @@ export class ManageScreen extends Component {
     handleDelete = performDelete => () => {
         if (performDelete) {
             const { id } = this.props.delete;
-            const { manage, removeOne, resource } = this.props;
+            const { deleteImage, manage, removeOne, resource } = this.props;
             apiCall('delete', {
                 resource,
                 id
             }).then(response => {
-                const stateResource = (manage.includes('all')
-                    ? `${manage.slice(3)}`
-                    : manage
-                ).toUpperCase();
-                removeOne(id, stateResource);
+                if (manage === 'images') {
+                    deleteImage(id);
+                } else {
+                    const stateResource = (manage.includes('all')
+                        ? `${manage.slice(3)}`
+                        : manage
+                    ).toUpperCase();
+                    removeOne(id, stateResource);
+                }
                 this.props.clearDelete();
             });
         } else {
@@ -40,7 +45,9 @@ export class ManageScreen extends Component {
 
     openDelete = id => () => {
         this.props.setDelete({
-            ...this.props.allValues(this.props.manage)[`${id}`],
+            ...(this.props.manage === 'images'
+                ? { id, name: id }
+                : this.props.allValues(this.props.manage)[`${id}`]),
             resource: this.props.resource
         });
     };
@@ -58,9 +65,10 @@ export class ManageScreen extends Component {
                                 <SettingsIcon />
                             </ListItemIcon>
                         </ListItem>
-
                         <Divider />
-                        {!isEmpty(this.props.values) ? (
+                        {this.props.manage === 'images' ? (
+                            <ManageImages title={title} openDelete={this.openDelete} />
+                        ) : !isEmpty(this.props.values) ? (
                             Object.values(this.props.values).map(item => (
                                 <ListItem key={item.id} button>
                                     <ListItemText
@@ -96,6 +104,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     clearDelete: () => dispatch(genericAction('CLEAR', 'DELETE', {})),
+    deleteImage: name => dispatch(genericAction('DELETE', 'IMAGE', name)),
     removeOne: (id, resource) => {
         dispatch(genericAction('DELETE', `ALL_${pluralToSingular(resource).toUpperCase()}`, id));
         dispatch(genericAction('DELETE', resource.toUpperCase(), {}));

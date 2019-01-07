@@ -5,4 +5,4 @@ __pycache__
 ve/
 .idea/
 
-/uploads/*
+/dnd-runner/public/images/*

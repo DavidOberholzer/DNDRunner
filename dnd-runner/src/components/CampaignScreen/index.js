@@ -26,6 +26,9 @@ export class CampaignScreen extends Component {
             apiCall('getAll', {
                 resource: 'campaigns'
             }),
+            apiCall('getAll', {
+                resource: 'images'
+            }),
             ...allNames.map(name =>
                 apiCall('getAll', {
                     resource: name
@@ -36,8 +39,9 @@ export class CampaignScreen extends Component {
                     };
                 })
             )
-        ]).then(([campaigns, ...other]) => {
+        ]).then(([campaigns, images, ...other]) => {
             this.props.setCampaigns(campaigns);
+            this.props.setImages(images);
 
             other.map(one => {
                 this.props.setAll(pluralToSingular(one.name).toUpperCase(), one.response);
@@ -140,6 +144,7 @@ const mapDispatchToProps = dispatch => ({
     setCampaignMode: () => dispatch(setMode('campaign')),
     setCampaigns: campaigns => dispatch(genericAction('SET_MANY', 'CAMPAIGN', campaigns)),
     setEdit: data => dispatch(genericAction('SET', 'EDIT', data)),
+    setImages: data => dispatch(genericAction('SET_MANY', 'IMAGE', data)),
     setThing: (resource, data) => dispatch(genericAction('ADD', resource, data))
 });
 

@@ -1,7 +1,7 @@
 import os
 
-UPLOAD_FOLDER = "/uploads"
-ALLOWED_EXTENSIONS = {"txt", "pdf", "png", "jpg", "jpeg", "gif"}
+UPLOAD_FOLDER = "/dnd-runner/public/images"
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 
 SQLALCHEMY_DATABASE_URI = os.environ.get(
     "DB_URI",

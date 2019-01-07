@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import Dialog from '@material-ui/core/Dialog';
@@ -7,9 +8,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-
 import TextField from '@material-ui/core/TextField';
 
+import ImageSelect from '../ImageSelect';
 import RelatedList from '../RelatedList';
 
 export class EditDialog extends Component {
@@ -27,15 +28,14 @@ export class EditDialog extends Component {
     initializeState = () =>
         this.props.fields.reduce((accumulator, field) => {
             accumulator[field.name] = {
-                type: field.type,
-                label: field.label,
-                value: this.props.data[field.name]
+                ...field,
+                value: this.props.data[field.name] || (field.type === 'number' ? 0 : '')
             };
             return accumulator;
         }, {});
 
     handleChange = event => {
-        const name = event.target.id;
+        const name = event.target.id || event.target.name;
         const value = event.target.value || event.target.checked;
         this.setState({
             fields: {
@@ -84,6 +84,12 @@ export class EditDialog extends Component {
                                     label={details.label}
                                     style={{ marginLeft: 0 }}
                                 />
+                            ) : details.type === 'image' ? (
+                                <ImageSelect
+                                    key={name}
+                                    details={details}
+                                    handleChange={this.handleChange}
+                                />
                             ) : (
                                 <TextField
                                     key={name}
@@ -127,4 +133,9 @@ export class EditDialog extends Component {
     }
 }
 
-export default EditDialog;
+const mapStateToProps = state => ({ images: state.images });
+
+export default connect(
+    mapStateToProps,
+    {}
+)(EditDialog);

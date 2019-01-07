@@ -16,6 +16,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Switch from '@material-ui/core/Switch';
 
+import ImageSelect from '../ImageSelect';
 import { isEmpty, titleCase } from '../../utils';
 
 class AddDialog extends Component {
@@ -106,13 +107,8 @@ class AddDialog extends Component {
         return (
             <Dialog open={this.props.open} onClose={this.handleClose(false)}>
                 <DialogTitle>{this.props.title}</DialogTitle>
-                <DialogContent>
-                    <form
-                        className="Column-Display"
-                        onSubmit={this.props.onSubmit}
-                        noValidate
-                        autoComplete="off"
-                    >
+                <DialogContent style={{ minWidth: 500 }}>
+                    <form className="Column-Form" noValidate autoComplete="off">
                         {Object.entries(this.state.fields).map(([name, details]) => {
                             if (details.global) {
                                 return (
@@ -187,6 +183,12 @@ class AddDialog extends Component {
                                             label={details.label}
                                             style={{ marginLeft: 0 }}
                                         />
+                                    ) : details.type === 'image' ? (
+                                        <ImageSelect
+                                            key={name}
+                                            details={details}
+                                            handleChange={this.handleChange}
+                                        />
                                     ) : (
                                         <TextField
                                             key={name}
@@ -195,7 +197,7 @@ class AddDialog extends Component {
                                             type={details.type}
                                             value={details.value}
                                             onChange={this.handleChange}
-                                            style={{ margin: '10px', width: '100%' }}
+                                            style={{ margin: '10px' }}
                                             multiline
                                         />
                                     );
@@ -229,6 +231,7 @@ class AddDialog extends Component {
 }
 
 const mapStateToProps = state => ({
+    images: state.images,
     storeValues: resource => state[`all${resource}`]
 });
 

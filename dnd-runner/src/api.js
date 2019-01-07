@@ -17,7 +17,8 @@ const apiCalls = {
     delete: ({ resource, id }) =>
         fetch(`${apiURL}${resource}/${id}`, {
             method: 'DELETE'
-        })
+        }),
+    uploadImage: data => fetch(`${apiURL}images`, { method: 'POST', body: data })
 };
 
 const apiCall = (type, requestObject) => {

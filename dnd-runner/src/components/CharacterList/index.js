@@ -60,7 +60,14 @@ class CharacterList extends Component {
                         return (
                             <Card key={character.id} style={{ margin: 10 }}>
                                 <CardHeader
-                                    avatar={<Avatar>{character.name.charAt(0)}</Avatar>}
+                                    avatar={
+                                        <Avatar
+                                            alt={character.name.charAt(0)}
+                                            src={`${process.env.PUBLIC_URL}/images/${
+                                                character.avatar
+                                            }`}
+                                        />
+                                    }
                                     title={character.name}
                                     subheader={
                                         !character.alive ? 'Dead' : dying ? 'Dying' : 'Alive'

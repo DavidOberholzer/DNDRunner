@@ -9,6 +9,7 @@ import BasketIcon from '@material-ui/icons/ShoppingBasketOutlined';
 import BattleIcon from '@material-ui/icons/WarningOutlined';
 import EnemiesIcon from '@material-ui/icons/PetsOutlined';
 import PlayersIcon from '@material-ui/icons/SupervisedUserCircleOutlined';
+import ImagesIcon from '@material-ui/icons/CameraRoll';
 import SettingsIcon from '@material-ui/icons/SettingsApplications';
 import TerrainIcon from '@material-ui/icons/TerrainOutlined';
 
@@ -59,6 +60,12 @@ class ManageSelect extends Component {
                         <BasketIcon />
                     </ListItemIcon>
                     <ListItemText primary="Items" />
+                </ListItem>
+                <ListItem button onClick={this.handleSelect('images')}>
+                    <ListItemIcon>
+                        <ImagesIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Images" />
                 </ListItem>
             </List>
         );
