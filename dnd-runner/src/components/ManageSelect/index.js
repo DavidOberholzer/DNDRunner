@@ -14,6 +14,7 @@ import SettingsIcon from '@material-ui/icons/SettingsApplications';
 import TerrainIcon from '@material-ui/icons/TerrainOutlined';
 
 import genericAction from '../../actions';
+import { setMode } from '../../actions/mode';
 
 class ManageSelect extends Component {
     handleSelect = page => () => {
@@ -76,7 +77,10 @@ const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => ({
     clearCampaign: () => dispatch(genericAction('CLEAR', 'CAMPAIGN', {})),
-    setManage: value => dispatch(genericAction('SET', 'MANAGE', value))
+    setManage: value => {
+        dispatch(setMode('campaign'));
+        dispatch(genericAction('SET', 'MANAGE', value));
+    }
 });
 
 export default connect(

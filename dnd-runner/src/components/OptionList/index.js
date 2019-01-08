@@ -36,7 +36,8 @@ class OptionList extends Component {
                 if (newOne) {
                     data = await apiCall('addNew', {
                         resource: 'items',
-                        data: data
+                        data: data,
+                        token: this.props.token
                     });
                     this.props.addOne(data, 'ITEM');
                 }
@@ -46,7 +47,8 @@ class OptionList extends Component {
                     data: {
                         item_id: data.id,
                         player_id
-                    }
+                    },
+                    token: this.props.token
                 });
 
                 data['amount'] = 1;
@@ -116,7 +118,8 @@ class OptionList extends Component {
 const mapStateToProps = state => ({
     players: state.players,
     enemies: state.enemies,
-    mode: state.mode
+    mode: state.mode,
+    token: state.token
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -21,6 +21,9 @@ export const runnerApp = combineReducers({
     allItems: createMulitReducer('all_item'),
     manage: createSingleReducer('manage', null),
     images: createMulitListReducer('image'),
+    token: createSingleReducer('token', null),
+    logout: createSingleReducer('logout', false),
+    user: createSingleReducer('user', {}),
     mode,
     order
 });

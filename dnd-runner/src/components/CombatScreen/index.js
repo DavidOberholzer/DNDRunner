@@ -43,7 +43,8 @@ class CombatScreen extends Component {
             data: {
                 time_of_day,
                 day
-            }
+            },
+            token: this.props.token
         }).then(response => {
             this.props.setCampaign(response);
         });
@@ -106,6 +107,7 @@ class CombatScreen extends Component {
 }
 
 const mapStateToProps = state => ({
+    token: state.token,
     campaign: state.campaign,
     order: state.order.order,
     start: state.order.start

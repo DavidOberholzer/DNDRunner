@@ -24,7 +24,8 @@ class RelatedList extends Component {
         apiCall('update', {
             resource: `${parentName}-${resource}`,
             id: `${this.props.edit.data.id}/${id}`,
-            data: { amount: ++amount }
+            data: { amount: ++amount },
+            token: this.props.token
         }).then(response => {
             let newValue = this.props.edit.data;
             newValue[resource] = newValue[resource].map(value => {
@@ -50,7 +51,8 @@ class RelatedList extends Component {
         if (amount === 0) {
             await apiCall('delete', {
                 resource: `${parentName}-${resource}`,
-                id: `${this.props.edit.data.id}/${id}`
+                id: `${this.props.edit.data.id}/${id}`,
+                token: this.props.token
             });
             newValue = this.props.edit.data;
             newValue[resource] = newValue[resource].filter(value => value.id !== id);
@@ -58,7 +60,8 @@ class RelatedList extends Component {
             apiCall('update', {
                 resource: `${parentName}-${resource}`,
                 id: `${this.props.edit.data.id}/${id}`,
-                data: { amount }
+                data: { amount },
+                token: this.props.token
             });
             newValue = this.props.edit.data;
             newValue[resource] = newValue[resource].map(value => {
@@ -119,7 +122,8 @@ class RelatedList extends Component {
 }
 
 const mapStateToProps = state => ({
-    edit: state.edit
+    edit: state.edit,
+    token: state.token
 });
 
 const mapDispatchToProps = dispatch => ({

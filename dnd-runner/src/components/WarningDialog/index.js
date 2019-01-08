@@ -15,11 +15,13 @@ class WarningDialog extends Component {
             <Dialog open={!isEmpty(this.props.delete)} onClose={this.props.handleDelete(false)}>
                 <DialogTitle>{titleCase(this.props.type)}</DialogTitle>
                 <DialogContent>
-                    {this.props.delete.resource && (
+                    {this.props.type && (
                         <Typography>
-                            {`Are you sure you want to ${this.props.type} this ${pluralToSingular(
-                                this.props.delete.resource
-                            )} ${this.props.delete.name}?`}
+                            {`Are you sure you want to ${this.props.type} ${this.props.delete
+                                .resource &&
+                                ` this ${pluralToSingular(this.props.delete.resource)} ${
+                                    this.props.delete.name
+                                }?`}`}
                         </Typography>
                     )}
                 </DialogContent>

@@ -31,6 +31,21 @@
     }
 }
 
+.Login {
+    background-image: url(/background.jpg);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    width: 100%;
+    height: 100%;
+}
+
+.Login-Form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
 .Row-Display {
     display: flex;
     flex-direction: row;

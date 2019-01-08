@@ -136,7 +136,7 @@ class AddDialog extends Component {
                         {Object.entries(this.state.fields).map(([name, details]) => {
                             if (details.global) {
                                 return (
-                                    <FormControl key={name} style={{ width: '100%' }}>
+                                    <FormControl key={name} style={{ margin: '10px' }}>
                                         <InputLabel htmlFor={details.name}>
                                             {details.label}
                                         </InputLabel>
@@ -170,7 +170,7 @@ class AddDialog extends Component {
                         {this.props.existing &&
                         this.state.checkedExisting &&
                         !isEmpty(this.props.storeValues(this.resourceName)) ? (
-                            <FormControl style={{ width: '100%' }}>
+                            <FormControl style={{ margin: '10px' }}>
                                 <InputLabel htmlFor="existing-simple">
                                     Existing {this.resourceName}
                                 </InputLabel>

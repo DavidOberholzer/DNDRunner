@@ -26,11 +26,13 @@ class CampaignSelect extends Component {
         Promise.all([
             apiCall('getRelated', {
                 resource: 'players-in-campaign',
-                id
+                id,
+                token: this.props.token
             }),
             apiCall('getRelated', {
                 resource: 'battles-in-campaign',
-                id
+                id,
+                token: this.props.token
             })
         ]).then(([players, battles]) => {
             this.props.setPlayers(players);
@@ -66,7 +68,8 @@ class CampaignSelect extends Component {
 }
 
 const mapStateToProps = state => ({
-    campaigns: state.campaigns
+    campaigns: state.campaigns,
+    token: state.token
 });
 
 const mapDispatchToProps = dispatch => ({

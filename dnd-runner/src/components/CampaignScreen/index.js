@@ -12,26 +12,29 @@ import { setMode } from '../../actions/mode';
 import apiCall from '../../api';
 import { RESOURCE_FIELDS } from '../../constants';
 import { isEmpty, pluralToSingular, singularToPlural } from '../../utils';
+import AccountScreen from '../AccountScreen';
 import ManageScreen from '../ManageScreen';
 import RemoveDialog from '../RemoveDialog';
 
 export class CampaignScreen extends Component {
-    state = {
-        mode: 'campaign'
-    };
-
     componentDidMount() {
         const allNames = ['players', 'battles', 'enemies', 'items'];
         Promise.all([
-            apiCall('getAll', {
-                resource: 'campaigns'
+            apiCall('getUser', {
+                token: this.props.token
             }),
             apiCall('getAll', {
-                resource: 'images'
+                resource: 'campaigns',
+                token: this.props.token
+            }),
+            apiCall('getAll', {
+                resource: 'images',
+                token: this.props.token
             }),
             ...allNames.map(name =>
                 apiCall('getAll', {
-                    resource: name
+                    resource: name,
+                    token: this.props.token
                 }).then(response => {
                     return {
                         response,
@@ -39,7 +42,8 @@ export class CampaignScreen extends Component {
                     };
                 })
             )
-        ]).then(([campaigns, images, ...other]) => {
+        ]).then(([user, campaigns, images, ...other]) => {
+            this.props.setUser(user);
             this.props.setCampaigns(campaigns);
             this.props.setImages(images);
 
@@ -55,7 +59,8 @@ export class CampaignScreen extends Component {
             apiCall('update', {
                 resource: singularToPlural(this.props.edit.resource),
                 id,
-                data
+                data,
+                token: this.props.token
             })
                 .then(response => {
                     this.props.setThing(this.props.edit.resource.toUpperCase(), response);
@@ -93,6 +98,10 @@ export class CampaignScreen extends Component {
 
         return this.props.manage ? (
             <ManageScreen />
+        ) : this.props.mode === 'account' ? (
+            <Card className="Column-Display">
+                <AccountScreen />
+            </Card>
         ) : !isEmpty(this.props.campaign) ? (
             <Card className="Row-Display">
                 <RemoveDialog />
@@ -116,7 +125,7 @@ export class CampaignScreen extends Component {
                         character
                     />
                 )}
-                <OptionList mode={this.state.mode} />
+                <OptionList mode={this.props.mode} />
                 {listProps.values && <GenericList {...listProps} />}
             </Card>
         ) : (
@@ -134,7 +143,8 @@ const mapStateToProps = state => ({
     enemies: state.enemies,
     mode: state.mode,
     edit: state.edit,
-    manage: state.manage
+    manage: state.manage,
+    token: state.token
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -145,6 +155,7 @@ const mapDispatchToProps = dispatch => ({
     setCampaigns: campaigns => dispatch(genericAction('SET_MANY', 'CAMPAIGN', campaigns)),
     setEdit: data => dispatch(genericAction('SET', 'EDIT', data)),
     setImages: data => dispatch(genericAction('SET_MANY', 'IMAGE', data)),
+    setUser: user => dispatch(genericAction('SET', 'USER', user)),
     setThing: (resource, data) => dispatch(genericAction('ADD', resource, data))
 });
 

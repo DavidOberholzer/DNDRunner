@@ -30,11 +30,11 @@ class BattleScreen extends Component {
                 id: player.id,
                 data: {
                     experience: player.experience
-                }
+                },
+                token: this.props.token
             });
             return player;
         });
-        console.log(newPlayers);
         this.props.setPlayers(newPlayers);
         newPlayers.map(player => this.props.addAllPlayers(player));
         this.props.clearOrderList();
@@ -71,7 +71,7 @@ class BattleScreen extends Component {
                         </Button>
                         {mode === 'combat' && (
                             <Button
-                                style={{ width: '100%' }}
+                                style={{ width: '100%', marginTop: '10px' }}
                                 variant="contained"
                                 onClick={this.handleComplete}
                             >
@@ -88,7 +88,8 @@ class BattleScreen extends Component {
 const mapStateToProps = state => ({
     mode: state.mode,
     battle: state.battle,
-    players: state.players
+    players: state.players,
+    token: state.token
 });
 
 const mapDispatchToProps = dispatch => ({

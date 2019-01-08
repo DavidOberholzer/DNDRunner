@@ -22,7 +22,8 @@ class BattleList extends Component {
         this.props.setBattle(this.props.battles[id]);
         apiCall('getRelated', {
             resource: 'enemies-in-battle',
-            id
+            id,
+            token: this.props.token
         }).then(enemies => {
             this.props.setEnemies(enemies);
             this.props.setBattleMode();
@@ -57,25 +58,16 @@ class BattleList extends Component {
                                 </Typography>
                             </CardContent>
                             <CardActions style={{ marginBottom: '10px' }}>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={this.handleView(battle.id)}
-                                >
+                                <Button color="primary" onClick={this.handleView(battle.id)}>
                                     <ManageIcon />
                                     Manage
                                 </Button>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={this.handleOpenEdit(battle)}
-                                >
+                                <Button color="primary" onClick={this.handleOpenEdit(battle)}>
                                     <EditIcon />
                                     Edit
                                 </Button>
                                 {this.props.mode !== 'combat' && this.props.mode !== 'turn-order' && (
                                     <Button
-                                        variant="contained"
                                         color="secondary"
                                         onClick={this.props.handleDelete(battle.id)}
                                     >
@@ -93,7 +85,8 @@ class BattleList extends Component {
 
 const mapStateToProps = state => ({
     battles: state.battles,
-    mode: state.mode
+    mode: state.mode,
+    token: state.token
 });
 
 const mapDispatchToProps = dispatch => ({

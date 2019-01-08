@@ -9,10 +9,13 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import AddIcon from '@material-ui/icons/Add';
 import TimeIcon from '@material-ui/icons/AccessTimeRounded';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import AddDialog from '../AddDialog';
 import CampaignSelect from '../CampaignSelect';
+import LogoutDialog from '../LogoutDialog';
 import ManageSelect from '../ManageSelect';
+import NavMenu from '../NavMenu';
 import Notification from '../Notification';
 
 import genericAction from '../../actions';
@@ -22,8 +25,10 @@ import { RESOURCE_FIELDS } from '../../constants';
 
 class NavBar extends Component {
     state = {
+        anchorEl: null,
         left: false,
         open: false,
+        openMenu: false,
         openNotification: false
     };
 
@@ -31,6 +36,10 @@ class NavBar extends Component {
         this.setState({
             left: open
         });
+    };
+
+    handleOpenMenu = event => {
+        this.setState({ anchorEl: event.currentTarget, openMenu: true });
     };
 
     handleOpen = () => {
@@ -41,7 +50,8 @@ class NavBar extends Component {
         if (!isEmpty(data)) {
             apiCall('addNew', {
                 resource: 'campaigns',
-                data: data
+                data: data,
+                token: this.props.token
             })
                 .then(campaign => {
                     this.props.addCampaign(campaign);
@@ -60,6 +70,10 @@ class NavBar extends Component {
         }
     };
 
+    handleCloseMenu = () => {
+        this.setState({ openMenu: false, anchorEl: null });
+    };
+
     handleCloseNotification = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -71,6 +85,7 @@ class NavBar extends Component {
     render() {
         return (
             <div>
+                <LogoutDialog />
                 <AddDialog
                     title="Add a New Campaign"
                     open={this.state.open}
@@ -117,8 +132,16 @@ class NavBar extends Component {
                         <Button color="inherit" onClick={this.handleOpen}>
                             Add Campaign <AddIcon />
                         </Button>
+                        <IconButton color="inherit" onClick={this.handleOpenMenu}>
+                            <AccountCircle />
+                        </IconButton>
                     </Toolbar>
                 </AppBar>
+                <NavMenu
+                    anchorEl={this.state.anchorEl}
+                    open={this.state.openMenu}
+                    handleCloseMenu={this.handleCloseMenu}
+                />
                 <Notification
                     open={this.state.openNotification}
                     message={this.state.notification}
@@ -130,7 +153,8 @@ class NavBar extends Component {
 }
 
 const mapStateToProps = state => ({
-    campaign: state.campaign
+    campaign: state.campaign,
+    token: state.token
 });
 
 const mapDispatchToProps = dispatch => ({

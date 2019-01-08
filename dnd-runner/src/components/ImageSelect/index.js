@@ -34,7 +34,7 @@ class ImageSelect extends Component {
                 {details.value && (
                     <Avatar
                         style={{ margin: '10px' }}
-                        src={`${process.env.PUBLIC_URL}/images/${details.value}`}
+                        src={`${process.env.REACT_APP_API_URL}images/${details.value}`}
                     />
                 )}
             </FormControl>

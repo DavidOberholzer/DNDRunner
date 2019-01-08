@@ -25,7 +25,8 @@ export class ManageScreen extends Component {
             const { deleteImage, manage, removeOne, resource } = this.props;
             apiCall('delete', {
                 resource,
-                id
+                id,
+                token: this.props.token
             }).then(response => {
                 if (manage === 'images') {
                     deleteImage(id);
@@ -99,15 +100,17 @@ const mapStateToProps = state => ({
     delete: state.delete,
     manage: state.manage,
     resource: state.manage.includes('all') ? state.manage.slice(3).toLowerCase() : state.manage,
-    values: state[state.manage]
+    values: state[state.manage],
+    token: state.token
 });
 
 const mapDispatchToProps = dispatch => ({
     clearDelete: () => dispatch(genericAction('CLEAR', 'DELETE', {})),
     deleteImage: name => dispatch(genericAction('DELETE', 'IMAGE', name)),
     removeOne: (id, resource) => {
-        dispatch(genericAction('DELETE', `ALL_${pluralToSingular(resource).toUpperCase()}`, id));
-        dispatch(genericAction('DELETE', resource.toUpperCase(), {}));
+        const name = pluralToSingular(resource).toUpperCase();
+        dispatch(genericAction('DELETE', `ALL_${name}`, id));
+        dispatch(genericAction('DELETE', name, id));
     },
     setDelete: data => dispatch(genericAction('SET', 'DELETE', data))
 });

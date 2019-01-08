@@ -29,7 +29,8 @@ class GenericList extends Component {
                 if (newOne) {
                     data = await apiCall('addNew', {
                         resource: this.props.resource,
-                        data: data
+                        data: data,
+                        token: this.props.token
                     });
                     this.props.addOne(data, resourceUpper);
                 }
@@ -41,7 +42,8 @@ class GenericList extends Component {
                     data: {
                         [`${resource}_id`]: data.id,
                         [`${this.props.parentName}_id`]: this.props[`${this.props.parentName}`].id
-                    }
+                    },
+                    token: this.props.token
                 });
 
                 this.setState({
@@ -117,7 +119,8 @@ const mapStateToProps = state => ({
     battles: state.battles,
     players: state.players,
     enemies: state.enemies,
-    mode: state.mode
+    mode: state.mode,
+    token: state.token
 });
 
 const mapDispatchToProps = dispatch => ({

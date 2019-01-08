@@ -5,11 +5,13 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Fab from '@material-ui/core/Fab';
 import TextField from '@material-ui/core/TextField';
 import TimeManageIcon from '@material-ui/icons/AddAlarm';
-import AddIcon from '@material-ui/icons/Add';
-import MinusIcon from '@material-ui/icons/Remove';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import genericAction from '../../actions';
 import apiCall from '../../api';
@@ -63,6 +65,7 @@ class TimeManager extends Component {
             day = 1;
         }
         this.updateCampaign(time_of_day, day);
+        this.setState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
     };
 
     updateCampaign = (time_of_day, day) => {
@@ -72,7 +75,8 @@ class TimeManager extends Component {
             data: {
                 time_of_day,
                 day
-            }
+            },
+            token: this.props.token
         }).then(response => {
             this.props.setCampaign(response);
         });
@@ -81,63 +85,68 @@ class TimeManager extends Component {
     render() {
         return (
             <Card style={{ marginBottom: '10px' }}>
-                <CardHeader
-                    avatar={
-                        <Avatar>
-                            <TimeManageIcon />
-                        </Avatar>
-                    }
-                    title="Time Manager"
-                    subheader="Adjust the time of the current campaign"
-                />
-                <CardContent>
-                    <form className="Row-Form">
-                        {Object.entries(this.state).map(([name, value]) => (
-                            <TextField
-                                key={name}
-                                id={name}
-                                label={titleCase(name)}
-                                type="number"
-                                value={value}
-                                onChange={this.handleChange}
-                                style={{ margin: '10px' }}
-                            />
-                        ))}
-                    </form>
-                </CardContent>
-                <CardActions>
-                    <Fab
-                        onClick={this.handleTimeUpdate(1)}
-                        color="primary"
-                        variant="extended"
-                        style={{ width: '50%', margin: '10px' }}
-                    >
-                        <AddIcon />
-                        Progress Time
-                    </Fab>
-                    <Fab
-                        onClick={this.handleTimeUpdate(-1)}
-                        color="secondary"
-                        variant="extended"
-                        style={{ width: '50%', margin: '10px' }}
-                    >
-                        <MinusIcon />
-                        Revert Time
-                    </Fab>
-                </CardActions>
+                <ExpansionPanel>
+                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                        <CardHeader
+                            avatar={
+                                <Avatar>
+                                    <TimeManageIcon />
+                                </Avatar>
+                            }
+                            title="Time Manager"
+                            subheader="Adjust the time of the current campaign"
+                        />
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails className="Column-Display">
+                        <CardContent>
+                            <form>
+                                {Object.entries(this.state).map(([name, value]) => (
+                                    <TextField
+                                        key={name}
+                                        id={name}
+                                        label={titleCase(name)}
+                                        type="number"
+                                        value={value}
+                                        onChange={this.handleChange}
+                                        style={{ margin: '10px', width: '5rem' }}
+                                    />
+                                ))}
+                            </form>
+                        </CardContent>
+                        <CardActions>
+                            <Fab
+                                onClick={this.handleTimeUpdate(1)}
+                                color="primary"
+                                variant="extended"
+                                style={{ width: '50%', margin: '10px' }}
+                            >
+                                Add
+                            </Fab>
+                            <Fab
+                                onClick={this.handleTimeUpdate(-1)}
+                                color="secondary"
+                                variant="extended"
+                                style={{ width: '50%', margin: '10px' }}
+                            >
+                                Minus
+                            </Fab>
+                        </CardActions>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
             </Card>
         );
     }
 }
 
 const mapStateToProps = state => ({
-    campaign: state.campaign
+    campaign: state.campaign,
+    token: state.token
 });
 
 const mapDispatchToProps = dispatch => ({
     setCampaign: campaign => {
         dispatch(genericAction('SET', 'CAMPAIGN', campaign));
-        dispatch(genericAction('ADD', 'CAMPAIGNS', campaign));
+        dispatch(genericAction('ADD', 'CAMPAIGN', campaign));
     }
 });
 

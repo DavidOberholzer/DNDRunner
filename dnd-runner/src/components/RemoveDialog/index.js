@@ -13,7 +13,8 @@ class RemoveDialog extends Component {
             const { id, name, parentName, resource } = this.props.delete;
             apiCall('delete', {
                 resource: `${parentName}-${resource}`,
-                id: `${this.props[`${parentName}`].id}/${id}`
+                id: `${this.props[`${parentName}`].id}/${id}`,
+                token: this.props.token
             }).then(response => {
                 const resourceName = pluralToSingular(resource).toUpperCase();
                 this.props.deleteValue(id, resourceName);
@@ -36,7 +37,8 @@ class RemoveDialog extends Component {
 const mapStateToProps = state => ({
     campaign: state.campaign,
     battle: state.battle,
-    delete: state.delete
+    delete: state.delete,
+    token: state.token
 });
 
 const mapDispatchToProps = dispatch => ({
