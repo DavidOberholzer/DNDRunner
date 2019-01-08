@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from flask_jwt import jwt_required
 
 from dnd_runner import db_actions, models
 
@@ -6,6 +7,7 @@ battle_enemy_methods = Blueprint("battle_enemies", __name__)
 
 
 @battle_enemy_methods.route("/battle-enemies", methods=["GET"])
+@jwt_required()
 def get_battle_enemies() -> tuple:
     battle_enemies, status = db_actions.crud(
         action="list",
@@ -18,6 +20,7 @@ def get_battle_enemies() -> tuple:
 
 
 @battle_enemy_methods.route("/battle-enemies/<battle_id>/<enemy_id>", methods=["GET"])
+@jwt_required()
 def get_battle_enemy(battle_id: int, enemy_id: int) -> tuple:
     battle_enemy, status = db_actions.crud(
         action="read",
@@ -31,6 +34,7 @@ def get_battle_enemy(battle_id: int, enemy_id: int) -> tuple:
 
 
 @battle_enemy_methods.route("/battle-enemies", methods=["POST"])
+@jwt_required()
 def add_battle_enemy() -> tuple:
     data = request.json
     battle_enemy, status = db_actions.crud(
@@ -43,6 +47,7 @@ def add_battle_enemy() -> tuple:
 
 
 @battle_enemy_methods.route("/battle-enemies/<battle_id>/<enemy_id>", methods=["POST"])
+@jwt_required()
 def update_battle_enemy(battle_id: int, enemy_id: int) -> tuple:
     data = request.json
     battle_enemy, status = db_actions.crud(
@@ -59,6 +64,7 @@ def update_battle_enemy(battle_id: int, enemy_id: int) -> tuple:
 
 
 @battle_enemy_methods.route("/battle-enemies/<battle_id>/<enemy_id>", methods=["DELETE"])
+@jwt_required()
 def delete_battle_enemy(battle_id: int, enemy_id: int) -> tuple:
     result, status = db_actions.crud(
         action="delete",

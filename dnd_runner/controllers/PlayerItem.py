@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from flask_jwt import jwt_required
 
 from dnd_runner import db_actions, models
 
@@ -7,6 +8,7 @@ player_item_methods = Blueprint("player_items", __name__)
 
 
 @player_item_methods.route("/player-items", methods=["GET"])
+@jwt_required()
 def get_player_items() -> tuple:
     player_items, status = db_actions.crud(
         action="list",
@@ -19,6 +21,7 @@ def get_player_items() -> tuple:
 
 
 @player_item_methods.route("/player-items/<player_id>/<item_id>", methods=["GET"])
+@jwt_required()
 def get_player_item(player_id: int, item_id: int) -> tuple:
     player_item, status = db_actions.crud(
         action="read",
@@ -32,6 +35,7 @@ def get_player_item(player_id: int, item_id: int) -> tuple:
 
 
 @player_item_methods.route("/player-items", methods=["POST"])
+@jwt_required()
 def add_player_item() -> tuple:
     data = request.json
     player_item, status = db_actions.crud(
@@ -44,6 +48,7 @@ def add_player_item() -> tuple:
 
 
 @player_item_methods.route("/player-items/<player_id>/<item_id>", methods=["POST"])
+@jwt_required()
 def update_player_item(player_id: int, item_id: int) -> tuple:
     data = request.json
     player_item, status = db_actions.crud(
@@ -60,6 +65,7 @@ def update_player_item(player_id: int, item_id: int) -> tuple:
 
 
 @player_item_methods.route("/player-items/<player_id>/<item_id>", methods=["DELETE"])
+@jwt_required()
 def delete_player_item(player_id: int, item_id: int) -> tuple:
     result, status = db_actions.crud(
         action="delete",

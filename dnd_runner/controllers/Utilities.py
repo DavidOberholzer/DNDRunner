@@ -1,6 +1,8 @@
+import hashlib
 import os
 
-from flask import Blueprint, flash, jsonify, request
+from flask import Blueprint, flash, jsonify, request, send_from_directory, Response
+from flask_jwt import jwt_required, current_identity
 from werkzeug.utils import secure_filename
 
 from dnd_runner import db_actions, models
@@ -9,7 +11,8 @@ from project import settings
 utility_methods = Blueprint("utility", __name__)
 
 
-@utility_methods.route("/items-of-player/<_id>")
+@utility_methods.route("/items-of-player/<_id>", methods=["GET"])
+@jwt_required()
 def items_of_player(_id: int) -> tuple:
     items, status = db_actions.crud(
         action="list",
@@ -29,7 +32,8 @@ def items_of_player(_id: int) -> tuple:
     return jsonify(items), status
 
 
-@utility_methods.route("/players-in-campaign/<_id>")
+@utility_methods.route("/players-in-campaign/<_id>", methods=["GET"])
+@jwt_required()
 def players_in_campaign(_id: int) -> tuple:
     players, status = db_actions.crud(
         action="list",
@@ -52,7 +56,8 @@ def players_in_campaign(_id: int) -> tuple:
     return jsonify(players), status
 
 
-@utility_methods.route("/battles-in-campaign/<_id>")
+@utility_methods.route("/battles-in-campaign/<_id>", methods=["GET"])
+@jwt_required()
 def battles_in_campaign(_id: int) -> tuple:
     battles, status = db_actions.crud(
         action="list",
@@ -72,7 +77,8 @@ def battles_in_campaign(_id: int) -> tuple:
     return jsonify(battles), status
 
 
-@utility_methods.route("/enemies-in-battle/<_id>")
+@utility_methods.route("/enemies-in-battle/<_id>", methods=["GET"])
+@jwt_required()
 def enemies_in_battle(_id: int) -> tuple:
     enemies, status = db_actions.crud(
         action="list",
@@ -92,7 +98,14 @@ def enemies_in_battle(_id: int) -> tuple:
     return jsonify(enemies), status
 
 
+@utility_methods.route("/images/<filename>", methods=["GET"])
+def image(filename: str) -> Response:
+    path = os.getcwd() + settings.UPLOAD_FOLDER
+    return send_from_directory(path, filename)
+
+
 @utility_methods.route("/images", methods=["GET"])
+@jwt_required()
 def get_images() -> tuple:
     path = os.getcwd() + settings.UPLOAD_FOLDER
     only_files = [f for f in os.listdir(path) if
@@ -101,6 +114,7 @@ def get_images() -> tuple:
 
 
 @utility_methods.route("/images", methods=["POST"])
+@jwt_required()
 def upload_image() -> tuple:
     status = 400
     response = {"message": "Invalid File Type"}
@@ -125,6 +139,7 @@ def upload_image() -> tuple:
 
 
 @utility_methods.route("/images/<_file>", methods=["DELETE"])
+@jwt_required()
 def delete_image(_file: str):
     path = os.getcwd() + settings.UPLOAD_FOLDER + "/" + _file
     response = {"message": "Success"}
@@ -136,6 +151,37 @@ def delete_image(_file: str):
         status = 404
 
     return jsonify(response), status
+
+
+def authenticate(username, password):
+    m = hashlib.md5(f"{password}{settings.SALT}".encode("utf-8"))
+    user, status = db_actions.crud(
+        action="read",
+        model=models.User,
+        query={
+            "username": username
+        },
+        params={
+            "dict": False
+        }
+    )
+    if user.password == m.hexdigest():
+        return user
+
+
+def identity(payload):
+    user_id = payload['identity']
+    user, status = db_actions.crud(
+        action="read",
+        model=models.User,
+        query={
+            "id": user_id
+        },
+        params={
+            "dict": False
+        }
+    )
+    return user
 
 
 def allowed_file(filename):

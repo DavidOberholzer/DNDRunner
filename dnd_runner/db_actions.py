@@ -3,7 +3,7 @@ import datetime
 from sqlalchemy.exc import IntegrityError
 from project.app import DB
 
-CRUD = ["create", "read", "update", "delete", "list"]
+CRUD = ["create", "read", "update", "delete", "delete_many", "list"]
 
 
 class DBActions:
@@ -36,14 +36,17 @@ class DBActions:
 
     def read(self, model: DB.Model, **kwargs) -> dict:
         result = DB.session.query(model).filter_by(**kwargs["query"]).first_or_404()
-        return self.to_dict(result)
+        if (kwargs["params"] or {}).get("dict", True):
+            return self.to_dict(result)
+        else:
+            return result
 
     def create(self, model: DB.Model, **kwargs) -> dict:
         instance = model(**kwargs["data"])
         DB.session.add(instance)
         DB.session.commit()
         query = {param: getattr(instance, param) for param in kwargs["params"]}
-        return self.read(model, query=query)
+        return self.read(model, query=query, params=None)
 
     def update(self, model: DB.Model, **kwargs) -> dict:
         instance = model.query.filter_by(**kwargs["query"]).first_or_404()
@@ -51,7 +54,7 @@ class DBActions:
             setattr(instance, key, value)
         DB.session.commit()
         query = {param: getattr(instance, param) for param in kwargs["params"]}
-        return self.read(model, query=query)
+        return self.read(model, query=query, params=None)
 
     @staticmethod
     def delete(model: DB.Model, **kwargs) -> dict:
@@ -63,6 +66,18 @@ class DBActions:
         if instance:
             DB.session.delete(instance)
             DB.session.commit()
+        return {"success": True}
+
+    @staticmethod
+    def delete_many(model: DB.Model, **kwargs) -> dict:
+        query = DB.session.query(model)
+        if "ids" in kwargs["query"]:
+            field = kwargs["query"]["ids"]["field"]
+            ids = kwargs["query"]["ids"]["values"]
+            query.filter(getattr(model, field).in_(ids)).delete()
+        else:
+            query.filter_by(**kwargs["query"]).delete()
+        DB.session.commit()
         return {"success": True}
 
 

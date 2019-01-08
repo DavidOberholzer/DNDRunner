@@ -1,9 +1,14 @@
-from dnd_runner.controllers import Campaign, Player, Item, Enemy, \
+from flask_jwt import JWT
+
+from dnd_runner.controllers import User, Campaign, Player, Item, Enemy, \
     Battle, BattleEnemy, CampaignBattle, CampaignPlayer, PlayerItem, \
     Utilities
 
 from project.app import App
 
+JWT(App, Utilities.authenticate, Utilities.identity)
+
+App.register_blueprint(User.user_methods)
 App.register_blueprint(Campaign.campaign_methods)
 App.register_blueprint(Player.player_methods)
 App.register_blueprint(Item.item_methods)

@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from flask_jwt import jwt_required
 
 from dnd_runner import db_actions, models
 
@@ -7,6 +8,7 @@ campaign_battle_methods = Blueprint("campaign_battles", __name__)
 
 
 @campaign_battle_methods.route("/campaign-battles", methods=["GET"])
+@jwt_required()
 def get_campaign_battles() -> tuple:
     campaign_battles, status = db_actions.crud(
         action="list",
@@ -19,6 +21,7 @@ def get_campaign_battles() -> tuple:
 
 
 @campaign_battle_methods.route("/campaign-battles/<campaign_id>/<battle_id>", methods=["GET"])
+@jwt_required()
 def get_campaign_battle(campaign_id: int, battle_id: int) -> tuple:
     campaign_battle, status = db_actions.crud(
         action="read",
@@ -32,6 +35,7 @@ def get_campaign_battle(campaign_id: int, battle_id: int) -> tuple:
 
 
 @campaign_battle_methods.route("/campaign-battles", methods=["POST"])
+@jwt_required()
 def add_campaign_battle() -> tuple:
     data = request.json
     campaign_battle, status = db_actions.crud(
@@ -44,6 +48,7 @@ def add_campaign_battle() -> tuple:
 
 
 @campaign_battle_methods.route("/campaign-battles/<campaign_id>/<battle_id>", methods=["POST"])
+@jwt_required()
 def update_campaign_battle(campaign_id: int, battle_id: int) -> tuple:
     data = request.json
     campaign_battle, status = db_actions.crud(
@@ -60,6 +65,7 @@ def update_campaign_battle(campaign_id: int, battle_id: int) -> tuple:
 
 
 @campaign_battle_methods.route("/campaign-battles/<campaign_id>/<battle_id>", methods=["DELETE"])
+@jwt_required()
 def delete_campaign_battle(campaign_id: int, battle_id: int) -> tuple:
     result, status = db_actions.crud(
         action="delete",

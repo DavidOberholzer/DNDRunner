@@ -1,7 +1,10 @@
 import os
 
-UPLOAD_FOLDER = "/dnd-runner/public/images"
+UPLOAD_FOLDER = "/uploads/images"
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
+
+SALT = os.environ.get("SALT", None)
+SECRET_KEY = os.environ.get("SECRET_KEY", "super secret")
 
 SQLALCHEMY_DATABASE_URI = os.environ.get(
     "DB_URI",
