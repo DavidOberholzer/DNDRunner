@@ -11,6 +11,9 @@ CYAN=\033[0;36m
 run:
 	$(PYTHON) main.py
 
+run-react:
+	cd dnd-runner; yarn start;
+
 test:
 	$(VENV)/bin/nosetests -s --with-coverage --cover-package=dnd_runner
 
