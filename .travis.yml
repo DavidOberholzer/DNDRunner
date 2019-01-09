@@ -1,0 +1,17 @@
+language: python
+python:
+  - "3.7-dev"
+
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'CREATE ROLE testdnd WITH PASSWORD 'testdnd';' -U postgres
+  - psql -c 'ALTER ROLE testdnd LOGIN SUPERUSER CREATEDB;' -U postgres
+  - psql -c 'CREATE DATABASE testdnd OWNER testdnd;' -U postgres
+
+install:
+  - pip install -r requirements.txt
+
+script:
+  - nosetests --with-coverage --cover-package=dnd_runner
