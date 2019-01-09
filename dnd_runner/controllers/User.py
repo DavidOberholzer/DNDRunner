@@ -71,26 +71,27 @@ def delete_user(_id: int) -> tuple:
             }
         )
         ids = [campaign["id"] for campaign in campaigns]
-        db_actions.crud(
-            action="delete_many",
-            model=models.CampaignBattle,
-            query={
-                "ids": {
-                    "field": "campaign_id",
-                    "values": ids
+        if ids:
+            db_actions.crud(
+                action="delete_many",
+                model=models.CampaignBattle,
+                query={
+                    "ids": {
+                        "field": "campaign_id",
+                        "values": ids
+                    }
                 }
-            }
-        )
-        db_actions.crud(
-            action="delete_many",
-            model=models.CampaignPlayer,
-            query={
-                "ids": {
-                    "field": "campaign_id",
-                    "values": ids
+            )
+            db_actions.crud(
+                action="delete_many",
+                model=models.CampaignPlayer,
+                query={
+                    "ids": {
+                        "field": "campaign_id",
+                        "values": ids
+                    }
                 }
-            }
-        )
+            )
         # Remove User Battles and relations
         battles, status = db_actions.crud(
             action="list",
@@ -100,16 +101,17 @@ def delete_user(_id: int) -> tuple:
             }
         )
         ids = [battle["id"] for battle in battles]
-        db_actions.crud(
-            action="delete_many",
-            model=models.BattleEnemy,
-            query={
-                "ids": {
-                    "field": "battle_id",
-                    "values": ids
+        if ids:
+            db_actions.crud(
+                action="delete_many",
+                model=models.BattleEnemy,
+                query={
+                    "ids": {
+                        "field": "battle_id",
+                        "values": ids
+                    }
                 }
-            }
-        )
+            )
         # Remove User Players and relations
         players, status = db_actions.crud(
             action="list",
@@ -119,16 +121,17 @@ def delete_user(_id: int) -> tuple:
             }
         )
         ids = [player["id"] for player in players]
-        db_actions.crud(
-            action="delete_many",
-            model=models.PlayerItem,
-            query={
-                "ids": {
-                    "field": "player_id",
-                    "values": ids
+        if ids:
+            db_actions.crud(
+                action="delete_many",
+                model=models.PlayerItem,
+                query={
+                    "ids": {
+                        "field": "player_id",
+                        "values": ids
+                    }
                 }
-            }
-        )
+            )
         # Remove User Enemies
         db_actions.crud(
             action="list",

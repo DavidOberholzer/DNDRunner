@@ -2,6 +2,7 @@ node_modules/
 build/
 */__pycache__
 __pycache__
+.coverage
 
 ve/
 .idea/

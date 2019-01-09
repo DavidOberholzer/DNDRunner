@@ -11,6 +11,9 @@ CYAN=\033[0;36m
 run:
 	$(PYTHON) main.py
 
+test:
+	$(VENV)/bin/nosetests -s --with-coverage --cover-package=dnd_runner
+
 makemigrations: $(VENV)
 	@echo "$(CYAN)Creating migrations...$(CLEAR)"
 	ALLOWED_API_KEYS="unused" $(VENV)/bin/python manage.py db migrate
